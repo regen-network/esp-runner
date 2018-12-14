@@ -13,3 +13,7 @@ CREATE TABLE job_dependency
   job_id bigserial references job,
   dep_id bigserial references job
 );
+
+-- See https://dba.stackexchange.com/a/69497
+CREATE FUNCTION job_get_one(runner_id text) AS $$
+$$ LANGUAGE SQL VOLATILE;
