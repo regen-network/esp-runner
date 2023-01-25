@@ -1,0 +1,17 @@
+@prefix sc: <https://schema.regen.network/statechart#> .
+@prefix cc1: <https://registry.regen.network/credit-class/1#> .
+
+cc1:initial a sc:State ;
+    sc:transition
+        [
+            sc:on [ sc:documentClass <http://regen.network/C02-Project> ] ;
+            sc:condition
+                [
+                    sc:shaclValidate <http://regen.network/shacl/C02-project.ttl>
+                ] ;
+        ]
+.
+
+cc1:accepted a sc:State ;
+.
+

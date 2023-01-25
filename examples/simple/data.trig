@@ -1,0 +1,3 @@
+<regen:document1> {
+    _:a <regen:foo> 1
+}

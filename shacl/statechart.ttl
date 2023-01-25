@@ -1,0 +1,99 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sc: <https://schema.regen.network/statechart#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+sc:StateShape
+    a sh:NodeShape ;
+    sh:class sc:State ;
+#    sh:property
+#        [
+#            sh:path sc:name ;
+#            sh:minCount 1 ;
+#            sh:maxCount 1 ;
+#        ] ;
+    sh:property
+        [
+            sh:path sc:transition ;
+            sh:node sc:TransitionShape ;
+        ]
+.
+
+
+sc:TransitionShape
+    a sh:NodeShape ;
+    sh:property
+        [
+            sh:path sc:target ;
+            sh:node sh:NodeShape ;
+        ] ;
+    sh:property
+        [
+            sh:path sc:on ;
+            sh:maxCount 1 ;
+            sc:or ( [ sh:node sc:DocumentEventSelectorShape ] )
+        ] ;
+    sh:property
+        [
+            sh:path sc:condition ;
+            sh:datatype xsd:string ;
+            sh:or ( [ sh:node sc:SparqlAskConditionShape ] [sh:node sc:ShaclValidateConditionShape ] )
+        ] ;
+    sh:property
+        [
+            sh:path sc:action ;
+            sh:or ( [ sh:node sc:ConstructActionShape ] [ sh:node sc:ExecActionShape ] )
+        ]
+.
+
+sc:DocumentEventSelectorShape
+    a sh:NodeShape ;
+    sh:description "If a document triggers an event, the IRI for the named graph of the document will be stored in the SPARQL query variable named event.";
+    sh:property
+        [
+            sh:path sc:documentClass ;
+            sh:nodeKind sh:IRI ;
+            sh:minCount 1 ;
+            sh:maxCount 1 ;
+        ]
+.
+sc:ShaclValidateConditionShape a sh:NodeShape ;
+    sh:property
+        [
+            sh:path sc:shaclValidate ;
+            sh:description "The IRI of the SHACL graph to validate against." ;
+            sh:nodeKind sh:IRI ;
+            sh:minCount 1 ;
+        ]
+.
+
+sc:SparqlAskConditionShape a sh:NodeShape ;
+    sh:property
+        [
+            sh:path sc:ask ;
+            sh:description
+                "A SPARQL ASK query describing the condition to be executed on the claim dataset.
+                If this transition was triggered by a document event, the IRI for the named graph that triggered the event will be stored in the event query variable." ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+        ] .
+
+sc:ConstructActionShape a sh:NodeShape ;
+    sh:property
+        [
+            sh:path sc:construct ;
+            sh:description
+                "A SPARQL CONSTRUCT query describing a new document to be generated and signed by the state chart runner authority and inserted into the claim dataset." ;
+            sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:maxCount 1 ;
+        ] .
+
+sc:ExecActionShape a sh:NodeShape ;
+    sh:property
+        [
+            sh:path sc:exec ;
+            sh:description
+                "A SPARQL CONSTRUCT query describing the message or messages to be executed on Regen Ledger by the state chart runner authority." ;
+        ] .
