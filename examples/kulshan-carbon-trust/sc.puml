@@ -1,0 +1,38 @@
+@startuml
+
+[*] --> Stage1
+
+state Stage1 {
+  [*] --> SubmitProjDesc
+  state "Submit Project Description" as SubmitProjDesc
+  SubmitProjDesc: <b>Project Proponent</b>
+  SubmitProjDesc --> ReviewProjDesc
+  state "Review Project Description" as ReviewProjDesc
+  ReviewProjDesc --> PublishProjDesc : Approved
+  ReviewProjDesc --> SubmitProjDesc : Rejected with comments
+  ReviewProjDesc: <b>Registry Team</b>
+  state "Publish Project Description" as PublishProjDesc
+  PublishProjDesc --> Stage2
+}
+
+state Stage2 {
+  [*] --> PublicCommentOnDescription
+  PublicCommentOnDescription : 15 days
+  PublicCommentOnDescription --> CompileComments
+  CompileComments --> ProjectProponentResponds
+  ProjectProponentResponds --> RegistryReviewsResponse
+  RegistryReviewsResponse --> ProjectProponentResponds : Rejected
+  RegistryReviewsResponse --> Stage3 : Accepted
+}
+
+state Stage3 {
+[*] --> SubmitProjectPlan
+SubmitProjectPlan: Baseline Monitoring Report
+SubmitProjectPlan: GIS Files of Land
+SubmitProjectPlan: Land Tenure Data
+SubmitProjectPlan: Project Roles Agreements
+SubmitProjectPlan: Signed Copy of Registry Terms of Service
+SubmitProjectPlan --> InternalValidation
+}
+
+@enduml
