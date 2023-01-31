@@ -1,0 +1,113 @@
+@startuml
+
+[*] --> Stage1
+
+state Stage1 {
+  state "Project Submission" as Stage1
+  [*] --> SubmitProjDesc
+  state "Submit Project Description" as SubmitProjDesc
+  SubmitProjDesc: <b>Project Proponent</b>
+  SubmitProjDesc --> ReviewProjDesc
+  state "Review Project Description" as ReviewProjDesc
+  ReviewProjDesc --> PublishProjDesc : Approved
+  ReviewProjDesc --> SubmitProjDesc : Rejected with comments
+  ReviewProjDesc: <b>Registry Team</b>
+  state "Publish Project Description" as PublishProjDesc
+  PublishProjDesc --> Stage2
+}
+
+state Stage2 {
+  state "Project Public Comment" as Stage2
+  [*] --> PublicCommentOnDescription
+  PublicCommentOnDescription : 15 days
+  PublicCommentOnDescription --> CompileComments
+  CompileComments --> ProjectProponentResponds
+  ProjectProponentResponds --> RegistryReviewsResponse
+  RegistryReviewsResponse --> ProjectProponentResponds : Rejected
+  RegistryReviewsResponse --> Stage3 : Accepted
+}
+
+state Stage3 {
+  state "Validation" as Stage3
+  [*] --> SubmitProjectPlan
+  state "Submit Project Plan" as SubmitProjectPlan
+  SubmitProjectPlan: Baseline Monitoring Report
+  SubmitProjectPlan: GIS Files of Land
+  SubmitProjectPlan: Land Tenure Data
+  SubmitProjectPlan: Project Roles Agreements
+  SubmitProjectPlan: Signed Copy of Registry Terms of Service
+  SubmitProjectPlan --> InternalValidation
+  state "Internal Validation & 3rd Party Review" as InternalValidation
+  InternalValidation --> SubmitProjectPlan : Request Changes
+  InternalValidation --> [*] : Rejected
+  InternalValidation --> Stage4 : Accepted
+}
+
+state Stage4 {
+    state "Project Registration" as Stage4
+    [*] --> Registration
+    Registration: Create Project On Chain
+    Registration: Specify Project Admin
+    Registration: Create Project Page
+    Registration: Publish Data from Project Plan on Project Page
+    Registration --> MRV
+}
+
+state MRV {
+    [*] --> TakeMeasurements
+    TakeMeasurements --> SubmitMeasurements
+    SubmitMeasurements --> CreateReport
+    CreateReport --> RegistryReviewsReport
+    state "Registry & 3rd Party Report Review" as RegistryReviewsReport
+    RegistryReviewsReport --> CreditsIssued : Approved
+    RegistryReviewsReport --> TakeMeasurements : No credits
+    RegistryReviewsReport --> OnHold : Non-compliant
+    state "On Hold" as OnHold
+    OnHold: 60 days to remediate
+    OnHold --> [*] : Delisted
+    OnHold --> TakeMeasurements : Remediated
+    CreditsIssued --> Distribution
+    state "Distribution of Credits" as Distribution
+    Distribution: Buffer pool allocation
+    Distribution: Permanence/reversal buffer allocation
+    Distribution --> TakeMeasurements : Next reporting period
+    Distribution --> ProjectRenewal : Final reporting period
+    Distribution --> BufferPoolAccounting : Termination
+    Distribution --> BufferPoolAccounting : Over-estimation of credits
+    RegistryReviewsReport --> BufferPoolAccounting : Early Termination
+}
+
+state "Project Renewal" as ProjectRenewal
+
+state ProjectRenewal {
+    [*] --> SpecifyRenewalPeriod
+    SpecifyRenewalPeriod --> Stage3
+}
+
+state BufferPoolAccounting {
+    [*] --> RemainingBalanceToProjProp : If there were increases
+    state "Remaining Balance Issued to Project Proponent" as RemainingBalanceToProjProp
+    RemainingBalanceToProjProp: 10% put in buffer pool
+    [*] --> GapWithdrawnAndRetired : If there were decreases
+    GapWithdrawnAndRetired --> RemainingBalanceToProjProp
+    state "Gap Withdrawn and Retired" as GapWithdrawnAndRetired
+    RemainingBalanceToProjProp --> [*]
+    GapWithdrawnAndRetired --> GapOptions : Buffer pool doesn't cover gap
+    GapOptions --> ProjectRenewal
+    GapOptions --> CoverLossesAndRetire
+    GapOptions --> PurchaseEquivalentCredits
+}
+
+state PermanencePoolAccounting {
+    state "Permanence/Reversal Buffer Accounting" as PermanencePoolAccounting
+    PermanencePoolAccounting : 25 years later (or whatever permanence period is)
+    [*] --> AdditionalMRVRound
+    AdditionalMRVRound --> IssuedToProjProp : If the same or greater
+    state "Issue rest to project proponent" as IssuedToProjProp
+    AdditionalMRVRound --> PermanenceGapOptions : If less than
+    PermanenceGapOptions --> CoverGap
+    PermanenceGapOptions --> PurchaseOrRecoupCredits
+    CoverGap --> IssuedToProjProp
+}
+
+@enduml
