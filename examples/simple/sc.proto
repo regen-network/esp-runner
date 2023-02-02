@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message MsgSendEvent {
+  string signer = 1;
+  string event = 2; // event IRI
+  string doc = 3; // RDF document
+}
+
+// event = cc1:submit
+// doc = <regen:113gdjFKcVCt13Za6vN7TtbgMM6LMSjRnu89BMCxeuHdkJ1hWUmy.rdf> {
+//[] a regenregistry:ProjectDescription ;
+//    regenregistry:projectId <regen:eco/projects/10> ;
+//regenregistry:projectDesc "Foo Bar" ;
+//    .
+//    }
+

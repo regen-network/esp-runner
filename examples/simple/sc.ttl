@@ -1,3 +1,4 @@
+PREFIX cc: <http://creativecommons.org/ns#>
 @prefix sc: <https://schema.regen.network/statechart#> .
 @prefix cc1: <regen:eco/CreditClass/C01#> .
 @prefix regenregistry: <https://registry.regen.network/schema#> .
@@ -5,27 +6,32 @@
 cc1:initial a sc:State ;
     sc:transition
         [
-            sc:on [ sc:documentClass regenregistry:ProjectDescription ] ;
-            sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
+            sc:on cc1:submit ;
+            sc:condition [ sc:signer "$projectDeveloper" ] ;
+            sc:condition [ sc:shaclValidateDoc <http://regen.network/shacl/C02-project.ttl> ] ;
             sc:condition [ sc:ask "include:ask1.rq" ] ;
-            sc:to cc1:inReview ;
+            sc:target cc1:inReview ;
+            sc:action [ sc:notify <did:regen:registry> ] ;
         ]
 .
 
 cc1:inReview a sc:State ;
     sc:transition
         [
-            sc:on [ sc:documentClass regenregistry:ProjectDescriptionComments ] ;
-            sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
+            sc:on cc1:accept ;
+            sc:condition [ sc:signer <did:regen:registry> ] ;
+            sc:condition [ sc:shaclValidateDoc <http://regen.network/shacl/C02-project.ttl> ; ] ;
             sc:condition [ sc:ask "include:ask-accepted.rq" ] ;
-            sc:to cc1:accepted ;
-        ];
+            sc:target cc1:accepted ;
+        ] ;
     sc:transition
         [
-            sc:on [ sc:documentClass regenregistry:ProjectDescriptionComments ] ;
+            sc:on cc:reject ;
+            sc:condition [ sc:signer <did:regen:registry> ] ;
             sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
             sc:condition [ sc:ask "include:ask-rejected.rq" ] ;
-            sc:to cc1:initial ;
+            sc:action [ sc:notify "$projectDeveloper" ] ;
+            sc:target cc1:initial ;
         ]
 .
 

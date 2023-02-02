@@ -4,8 +4,14 @@
     [] a regenregistry:ProjectDescription ;
         regenregistry:projectId <regen:eco/projects/10> ;
         regenregistry:projectDesc "Foo Bar" ;
-    .
 }
+
+<regen:statechart/SendEvent/proj10#1>
+    <regen:statechart/SendEvent#signer> <regen:acc/regenabcdef1234567ghjkl> ;
+    <regen:statechart/SendEvent#event> <cc1:submit> ;
+    <regen:statechart/SendEvent#doc> <regen:113gdjFKcVCt13Za6vN7TtbgMM6LMSjRnu89BMCxeuHdkJ1hWUmy.rdf> ;
+    <regen:statechart/SendEvent#timestamp> "2022-01-01T12:00:00Z"
+.
 
 <regen:data/DataAttestor/Gx5HJ/regen:acc/regenabcdef1234567ghjkl>
     a <regen:data/DataAttestor> ;
