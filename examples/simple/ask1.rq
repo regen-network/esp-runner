@@ -1,0 +1,15 @@
+# checks if there is a project description signed by this address
+PREFIX regenregistry: <https://registry.regen.network/schema#>
+ASK {
+    ?attestorEntry <regen:data/DataAttestor#id> ?dataId .
+    ?attestorEntry <regen:data/DataAttestor#attestor> $projectDeveloper .
+    ?dataidEntry <regen:data/DataID#id> ?dataId .
+    ?dataidEntry <regen:data/DataID#iri> ?docIri .
+    GRAPH ?docIri {
+        ?x a regenregistry:ProjectDescription .
+        ?x regenregistry:projectId $projectId
+    }
+}
+
+# $projectId = <regen:eco/projects/10>
+# $projectDeveloper = <regen:acc/regenabcdef1234567ghjkl>

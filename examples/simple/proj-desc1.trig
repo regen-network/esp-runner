@@ -1,0 +1,24 @@
+@prefix regenregistry: <https://registry.regen.network/schema#> .
+
+<regen:113gdjFKcVCt13Za6vN7TtbgMM6LMSjRnu89BMCxeuHdkJ1hWUmy.rdf> {
+    [] a regenregistry:ProjectDescription ;
+        regenregistry:projectId <regen:eco/projects/10> ;
+        regenregistry:projectDesc "Foo Bar" ;
+    .
+}
+
+<regen:data/DataAttestor/Gx5HJ/regen:acc/regenabcdef1234567ghjkl>
+    a <regen:data/DataAttestor> ;
+    <regen:data/DataAttestor#id> "Gx5HJ" ;
+    <regen:data/DataAttestor#attestor> <regen:acc/regenabcdef1234567ghjkl> ;
+    <regen:data/DataAttestor#timestamp> "2022-01-01T12:00:00Z" .
+
+<regen:data/DataID/Gx5HJ>
+    a <regen:data/DataID> ;
+    <regen:data/DataID#id> "Gx5HJ" ;
+    <regen:data/DataID#iri> <regen:113gdjFKcVCt13Za6vN7TtbgMM6LMSjRnu89BMCxeuHdkJ1hWUmy.rdf> .
+
+<regen:data/DataAnchor/Gx5HJ>
+    a <regen:data/DataAnchor> ;
+    <regen:data/DataAnchor#id> "Gx5HJ" ;
+    <regen:data/DataAnchor#timestamp> "2022-01-01T12:00:00Z" .

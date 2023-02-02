@@ -1,0 +1,55 @@
+@startuml
+
+package "registry.regen.network" {
+    frame "Authn & Authz" {
+        component "Login"
+        component "Create Account"
+        component "Create Group"
+    }
+    component "List Credit Classes"
+    component "List Projects"
+    component "List Methodologies"
+    component "List Program Materials"
+    frame "Project Development Workflow" {
+      component "Project Management Page:\nView of status within workflow\nCan view whole workflow and work on current & future submissions"
+      component "Form Filler & Submission:\nEditing a form collaboratively within a workflow and submitting when ready"
+      component "Raw Data Submission"
+      component "Inbox/List Active Documents"
+      component "List of Submitted Documents"
+    }
+    frame "Authoring Credit Classes"{
+      component "Form Schema Builder"
+      component "Credit Class/Methodology Visual Editor"
+    }
+}
+"List Credit Classes" --> "Regen Ledger"
+"List Projects" --> "Regen Ledger"
+
+database "Regen Ledger" {
+    frame "x/ecocredit" {
+        component "CreditClass"
+        component "Project"
+        component "Batch"
+    }
+
+    frame "x/data" {
+    }
+
+    frame "x/group" {
+    }
+}
+
+database "Registry Postgres" {
+
+}
+
+database "Registry SPARQL DB" {
+}
+
+node "Auth0" {
+}
+
+package "market.regen.network" {
+}
+
+@enduml

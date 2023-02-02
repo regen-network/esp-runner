@@ -1,17 +1,32 @@
 @prefix sc: <https://schema.regen.network/statechart#> .
-@prefix cc1: <https://registry.regen.network/credit-class/1#> .
+@prefix cc1: <regen:eco/CreditClass/C01#> .
+@prefix regenregistry: <https://registry.regen.network/schema#> .
 
 cc1:initial a sc:State ;
     sc:transition
         [
-            sc:on [ sc:documentClass <http://regen.network/C02-Project> ] ;
-            sc:condition
-                [
-                    sc:shaclValidate <http://regen.network/shacl/C02-project.ttl>
-                ] ;
+            sc:on [ sc:documentClass regenregistry:ProjectDescription ] ;
+            sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
+            sc:condition [ sc:ask "include:ask1.rq" ] ;
+            sc:to cc1:inReview ;
         ]
 .
 
-cc1:accepted a sc:State ;
+cc1:inReview a sc:State ;
+    sc:transition
+        [
+            sc:on [ sc:documentClass regenregistry:ProjectDescriptionComments ] ;
+            sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
+            sc:condition [ sc:ask "include:ask-accepted.rq" ] ;
+            sc:to cc1:accepted ;
+        ];
+    sc:transition
+        [
+            sc:on [ sc:documentClass regenregistry:ProjectDescriptionComments ] ;
+            sc:condition [ sc:shaclValidate <http://regen.network/shacl/C02-project.ttl> ; ] ;
+            sc:condition [ sc:ask "include:ask-rejected.rq" ] ;
+            sc:to cc1:initial ;
+        ]
 .
 
+cc1:accepted a sc:State .

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RDFAndSPARQL.SPARQLEndpointManager">
+    <option name="endpoints">
+      <map>
+        <entry key="8dc159f1-523d-410b-ab40-8d448cd3004a">
+          <value>
+            <SPARQLEndpointConfig>
+              <option name="endpointId" value="8dc159f1-523d-410b-ab40-8d448cd3004a" />
+              <option name="graphStoreUrl" value="http://localhost:3030/test1" />
+              <option name="name" value="Local" />
+              <option name="queryUrl" value="http://localhost:3030/test1" />
+              <option name="updateUrl" value="http://localhost:3030/test1" />
+            </SPARQLEndpointConfig>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

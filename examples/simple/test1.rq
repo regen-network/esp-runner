@@ -1,0 +1,9 @@
+PREFIX regenregistry: <https://registry.regen.network/schema#>
+SELECT ?iri ?proj WHERE {
+    ?anchor a  <regen:data/DataAnchor> .
+    ?anchor <regen:data/DataAnchor#id> ?id.
+    ?anchor <regen:data/DataAnchor#timestamp> ?ts.
+    ?dataid <regen:data/DataID#id> ?id .
+    ?dataid <regen:data/DataID#iri> ?iri .
+    GRAPH ?iri { ?x regenregistry:projectId ?proj }
+} LIMIT 10
