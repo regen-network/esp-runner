@@ -1,5 +1,4 @@
 import {EditorContent, useEditor} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { Node } from "@tiptap/core";
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';

@@ -23,6 +23,16 @@ const TestSchema = {
                 label: "A date field",
                 type: 'date',
             },
+            {
+                name: 'richtext',
+                label:"Rich text",
+                type: 'richtext',
+            },
+            {
+                name: 'multiline',
+                label:"Multi-line not-rich text",
+                type: 'multilinetext',
+            }
         ]
     }]
 }

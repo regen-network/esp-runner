@@ -44,3 +44,16 @@ export function useYArray<T>(array: Y.Array<T>): T[] {
     })
     return state
 }
+
+export function useYMapJSON(map: Y.Map<any>): {[key:string]:any} {
+    const json = useSyncExternalStore(function (listener) {
+        const onChange = (evt: Y.YMapEvent<any>) => {
+            listener()
+        }
+        map.observe(onChange)
+        return () => map.unobserve(onChange)
+    }, function () {
+        return map.toJSON()
+    })
+    return json
+}

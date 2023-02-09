@@ -2,6 +2,8 @@ import * as Y from 'yjs';
 import {useYMapValue} from "../../yutil";
 import {TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
+import {RichTextField} from "./fields/RichTextField";
+import {MultiLineTextField} from "./fields/MultiLineTextField";
 
 export interface EditorProps {
     schema: Schema
@@ -38,6 +40,8 @@ function prepMap(schema: Schema, ymap: Y.Map<any>) {
             if (!ymap.has(key)) {
                 switch (field.type) {
                     case 'text':
+                    case 'richtext':
+                    case 'multilinetext':
                         ymap.set(field.name, new Y.XmlFragment)
                 }
             }
@@ -67,6 +71,12 @@ const FormFieldEditor = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX
     switch (field.type) {
         case 'text': {
             return <TextField fragment={value}/>
+        }
+        case 'richtext': {
+            return <RichTextField fragment={value}/>
+        }
+        case 'multilinetext': {
+            return <MultiLineTextField fragment={value}/>
         }
         case 'date': {
             return <DateField onChange={setValue} value={value}/>
