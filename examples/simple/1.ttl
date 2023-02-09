@@ -1,0 +1,4 @@
+BASE <http://example.com/ns>
+PREFIX ex: <http://example.com/ns#>
+
+[] a ex:Person.

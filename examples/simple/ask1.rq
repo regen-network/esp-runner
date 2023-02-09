@@ -2,8 +2,8 @@
 PREFIX regenregistry: <https://registry.regen.network/schema#>
 ASK {
     GRAPH $eventDoc {
-        ?x a regenregistry:ProjectDescription .
-        ?x regenregistry:projectId $projectId
+        regenregistry:root a regenregistry:ProjectDescription .
+        regenregistry:root regenregistry:projectId <regen:eco/projects/10>
     }
 }
 

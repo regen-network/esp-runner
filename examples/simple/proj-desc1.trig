@@ -4,6 +4,8 @@
     [] a regenregistry:ProjectDescription ;
         regenregistry:projectId <regen:eco/projects/10> ;
         regenregistry:projectDesc "Foo Bar" ;
+        regenregistry:soilSample [ regenregistry:soilCarbon "20.05" ];
+        regenregistry:soilSample [ regenregistry:soilCarbon "15.05" ];
 }
 
 <regen:statechart/SendEvent/proj10#1>

@@ -1,0 +1,11 @@
+@prefix regenregistry: <https://registry.regen.network/schema#> .
+
+regenregistry:root a regenregistry:ProjectDescription ;
+    regenregistry:projectId <regen:eco/projects/10> ;
+    regenregistry:projectDesc "Foo Bar" .
+
+[] a regenregistry:ProjectDescription ;
+    regenregistry:projectId <regen:eco/projects/11> ;
+    regenregistry:projectDesc "Foo Bar" .
+
+<xyz:abc> <def:qrs> "hey".

@@ -1,3 +1,7 @@
 {
-  "current": "submit"
+  "state": "submit",
+  "params": {
+    "projectId": "foobar",
+    "projectDeveloper": "did:regen:1sdlgkh239sdgh138348"
+  }
 }

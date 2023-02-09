@@ -1,0 +1,14 @@
+PREFIX sc: <https://schema.regen.network/statechart#>
+
+shapeClass sc:State {
+    sc:transition [0..*] {
+        sc:on IRI [1..1] .
+        sc:target IRI [1..1] .
+        sc:condition [0..*] {
+            sc:signer xsd:string [0..1] .
+            sc:shaclValidateDoc IRI [0..*] .
+            sc:ask xsd:string [0..*] .
+        } .
+    } .
+}
+

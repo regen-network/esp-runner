@@ -1,0 +1,29 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX regenregistry: <https://registry.regen.network/schema#>
+
+regenregistry:RootShape
+    a sh:NodeShape ;
+    sh:targetNode regenregistry:root ;
+    sh:class regenregistry:ProjectDescription
+.
+
+regenregistry:ProjectDescription
+    a sh:NodeShape, rdfs:Class ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property
+        [
+            sh:path regenregistry:projectId ;
+            sh:nodeKind sh:IRI;
+            sh:minCount 1;
+            sh:maxCount 1;
+        ] ;
+    sh:property
+        [
+            sh:path regenregistry:projectDesc ;
+            sh:datatype xsd:string
+        ]
+.

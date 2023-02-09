@@ -32,18 +32,22 @@ sc:TransitionShape
         [
             sh:path sc:on ;
             sh:maxCount 1 ;
-            sc:or ( [ sh:node sc:DocumentEventSelectorShape ] )
+            sh:nodeKind sh:IRI
         ] ;
     sh:property
         [
             sh:path sc:condition ;
             sh:datatype xsd:string ;
-            sh:or ( [ sh:node sc:SparqlAskConditionShape ] [sh:node sc:ShaclValidateConditionShape ] )
+            sh:or ( [ sh:node sc:SparqlAskConditionShape ] [sh:node sc:ShaclValidateConditionShape ]
+                    [ sh:node sc:SignerConditionShapre ]
+                  )
         ] ;
     sh:property
         [
             sh:path sc:action ;
-            sh:or ( [ sh:node sc:ConstructActionShape ] [ sh:node sc:ExecActionShape ] )
+            sh:or ( [ sh:node sc:ConstructActionShape ] [ sh:node sc:ExecActionShape ]
+                    [ sh:node sc:NotifyActionShape ]
+                  )
         ]
 .
 
@@ -73,8 +77,7 @@ sc:SparqlAskConditionShape a sh:NodeShape ;
         [
             sh:path sc:ask ;
             sh:description
-                "A SPARQL ASK query describing the condition to be executed on the claim dataset.
-                If this transition was triggered by a document event, the IRI for the named graph that triggered the event will be stored in the event query variable." ;
+                "A SPARQL ASK query describing the condition to be executed on the claim dataset. If this transition was triggered by a document event, the IRI for the named graph that triggered the event will be stored in the event query variable." ;
             sh:datatype xsd:string ;
             sh:minCount 1 ;
         ] .
