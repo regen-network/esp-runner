@@ -4,7 +4,9 @@ import {useSyncExternalStore} from "react";
 export function useYMapKeys(map: Y.Map<any>): IterableIterator<string> {
     const keys = useSyncExternalStore(function (listener) {
         const onChange = (evt: Y.YMapEvent<any>) => {
-            listener()
+            if (evt.changes.added.size > 0 || evt.changes.deleted.size > 0) {
+                listener()
+            }
         }
         map.observe(onChange)
         return () => map.unobserve(onChange)
@@ -35,7 +37,9 @@ export function useYMapValue(map: Y.Map<any>, key: string): [any, ((value: any) 
 export function useYArray<T>(array: Y.Array<T>): T[] {
     const state = useSyncExternalStore(function (listener) {
         const onChange = (evt: Y.YArrayEvent<T>) => {
-            listener()
+            if (evt.changes.added.size > 0 || evt.changes.deleted.size > 0) {
+                listener()
+            }
         }
         array.observe(onChange)
         return () => array.unobserve(onChange)
@@ -45,7 +49,7 @@ export function useYArray<T>(array: Y.Array<T>): T[] {
     return state
 }
 
-export function useYMapJSON(map: Y.Map<any>): {[key:string]:any} {
+export function useYMapJSON(map: Y.Map<any>): { [key: string]: any } {
     const json = useSyncExternalStore(function (listener) {
         const onChange = (evt: Y.YMapEvent<any>) => {
             listener()

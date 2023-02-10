@@ -1,39 +1,34 @@
+import {RichTextField} from "../components/documents/fields/RichTextField";
+
 export interface FormSchema {
+    pages: Page[]
+}
+
+interface Page {
+    label: string
     fields: Field[]
 }
 
-// interface Page {
-//     label: string
-//     fields: Field[]
-// }
-
-export interface Type {
-    cardinality: Cardinality
-    elementType: ElementType
+export interface OneType {
+    required?: boolean
 }
 
-export type Cardinality = One | Many
-
-export interface One {
-    type: 'one'
-    required: boolean
-}
-
-export interface Many {
-    type: 'many'
-    ordered: boolean
+export interface ManyType {
     minCount?: number
     maxCount?: number
 }
 
-export type ElementType = OneOfElementType | OneOfType
-
-export type OneOfElementType =
-    ObjectType
-    | EnumType
+export type Type =
+    TextType
+    | RichTextType
     | NumberType
-    | TextType
     | DateType
+    | CheckboxType
+    | SelectType
+    | MultiSelectType
+    | ObjectType
+    | CollectionType
+    | OneOfType
 
 
 export interface ObjectType {
@@ -41,46 +36,65 @@ export interface ObjectType {
     fields: Field[]
 }
 
-export interface OneOfType {
+export interface OneOfType extends OneType {
     type: 'oneof'
-    choices: OneOfTypeOption[]
+    choices: OneOfChoiceType[]
 }
 
-export interface OneOfTypeOption {
+export interface OneOfChoiceType {
     name: string
     label: string
-    type: OneOfElementType
+    fields?: Field[]
 }
 
-export interface Field extends Type {
+export interface Field {
     name: string
     label: string
+    type: Type
 }
 
-export interface EnumType {
-    type: 'enum'
-    values: EnumValue[]
+export interface SelectType extends OneType {
+    type: 'select'
+    values: SelectValue[]
 }
 
-export interface EnumValue {
+export interface SelectValue {
     label: string
     value: string
 }
 
-export interface NumberType {
+export interface NumberType extends OneType {
     type: 'number'
     min?: number | string
     max?: number | string
     numDecimalPlaces?: number
 }
 
-export interface TextType {
+export interface TextType extends OneType {
     type: 'text'
     minLen?: number
     maxLen?: number
 }
 
-export interface DateType {
+export interface DateType extends OneType {
     type: 'date'
 }
 
+export interface CollectionType extends ManyType {
+    type: 'collection'
+    ordered: boolean
+    fields: Field[]
+}
+
+export interface MultiSelectType extends ManyType {
+    type: 'multiselect'
+    values: SelectValue[]
+}
+
+export interface CheckboxType {
+    type: 'checkbox'
+}
+
+export interface RichTextType {
+    type: 'richtext'
+}

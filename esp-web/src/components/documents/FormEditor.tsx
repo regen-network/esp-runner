@@ -1,9 +1,17 @@
 import * as Y from 'yjs';
-import {useYMapValue} from "../../yutil";
+import {useYArray, useYMapValue} from "../../yutil";
 import {TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
-import {ElementType, Field, FormSchema} from "../../model/FormSchema";
+import {Field, FormSchema} from "../../model/FormSchema";
 import {initYMap} from "../../model/initYMap";
+import {Box, Checkbox, FormControlLabel, Step, StepButton, Stepper} from "@mui/material";
+import React from "react";
+import {RichTextField} from "./fields/RichTextField";
+import {CheckBoxField} from "./fields/CheckboxField";
+import {MultiSelectField} from "./fields/MultiSelectField";
+import {SelectField} from "./fields/SelectField";
+import {Cell, Column, Form, Row, TableBody, TableHeader, TableView} from "@adobe/react-spectrum";
+import {CollectionField} from "./fields/CollectionField";
 
 export interface EditorProps {
     schema: FormSchema
@@ -12,116 +20,96 @@ export interface EditorProps {
 
 export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     initYMap(schema, ymap)
-    return <div children={
-        schema.fields.map((field) =>
-            <FormField key={field.label} field={field} ymap={ymap}/>)
-    }/>
-}
+    if (schema.pages.length == 1) {
+        const page = schema.pages[0]
+        return <Box sx={{width: '100%'}}>
+            {page.fields.map((field) =>
+                <FormField key={field.name} field={field} ymap={ymap}/>
+            )}
+        </Box>
+    } else {
+        const [activeStep, setActiveStep] = React.useState(0);
+        return <Box>
+            <Stepper nonLinear activeStep={activeStep}>
+                {schema.pages.map((page, index) => <Step key={index}>
+                    <StepButton onClick={() => setActiveStep(index)}>{page.label}</StepButton>
+                </Step>)}
+            </Stepper>
+            <Form>
+                {schema.pages[activeStep].fields.map((field) =>
+                    <FormField key={field.name} field={field} ymap={ymap}/>
+                )}
+            </Form>
+        </Box>
+    }
 
-const FieldsEditor = ({fields, ymap}: {
-    fields: Field[]
-    ymap: Y.Map<any>
-}): JSX.Element => {
-    return <div children={
-        fields.map((field) =>
-            <FormField key={field.label} field={field} ymap={ymap}/>)
-    }/>
 }
-
-// const FormPage = ({page, ymap}: { page: Page, ymap: Y.Map<any> }): JSX.Element => {
-//     return <div>
-//         <h1>{page.label}</h1>
-//         <div children={
-//             page.fields.map((field) =>
-//                 <FormField key={field.name} field={field} ymap={ymap}/>)
-//         }/>
-//     </div>
-// }
 
 const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Element => {
+    const [value, setValue] = useYMapValue(ymap, field.name)
+    const type = field.type
+    switch (type.type) {
+        case 'text':
+            return <TextField label={field.label} fragment={value}/>
+        case 'richtext':
+            return <RichTextField label={field.label} fragment={value}/>
+        case 'date':
+            return <DateField label={field.label} onChange={setValue} value={value}/>
+        case 'checkbox':
+            return <CheckBoxField label={field.label} onChange={setValue} value={value}/>
+        case 'multiselect':
+            return <MultiSelectField label={field.label} ymap={value} selectValues={type.values}/>
+        case 'select':
+            return <SelectField label={field.label} value={value} onChange={setValue} selectValues={type.values}/>
+        case 'object':
+            return <ObjectField label={field.label} fields={type.fields} ymap={value}/>
+        case 'object':
+            return <ObjectField label={field.label} fields={type.fields} ymap={value}/>
+        case 'collection': {
+            if (type.ordered) {
+                return <OrderedCollectionField label={field.label} fields={type.fields} yarray={value}/>
+            } else {
+                throw 'TODO'
+            }
+        }
+        default:
+            throw 'TODO'
+    }
+}
+
+const ObjectField = ({fields, ymap, label}: { label: string, fields: Field[], ymap: Y.Map<any> }): JSX.Element => {
+    return <Form>
+        <h3>{label}</h3>
+        <React.Fragment>
+            {fields.map((field) =>
+                <FormField key={field.name} field={field} ymap={ymap}/>
+            )}
+        </React.Fragment>
+    </Form>
+}
+
+const OrderedCollectionField = ({
+                                    fields,
+                                    yarray,
+                                    label
+                                }: { label: string, fields: Field[], yarray: Y.Array<any> }): JSX.Element => {
+    const elems = useYArray(yarray)
     return <div>
-        <h2>{field.label}</h2>
-        <FormFieldEditor field={field} ymap={ymap}/>
+        <h3>{label}</h3>
+        <TableView>
+            <TableHeader>
+                {fields.map((field) =>
+                    <Column>{field.label}</Column>)}
+            </TableHeader>
+            <TableBody>
+                {elems.map(elem =>
+                    <Row>
+                        {fields.map((field) => {
+                            const [value, setValue] = useYMapValue(elem, field.name)
+                            return <Cell>{value}</Cell>
+                        })}
+                    </Row>)}
+            </TableBody>
+        </TableView>
     </div>
 }
-
-const FormFieldEditor = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Element => {
-    const [value, setValue] = useYMapValue(ymap, field.name)
-    const {cardinality, elementType} = field
-    switch (cardinality.type) {
-        case 'one':
-            return <ElementEditor elementType={elementType} value={value} setValue={setValue}/>
-        case 'many':
-            if (cardinality.ordered) {
-                switch (elementType.type) {
-                    case 'text':
-                        throw 'TODO'
-                    case 'date':
-                        throw 'TODO'
-                    case 'object':
-                        throw 'TODO'
-                    case "enum":
-                        throw 'TODO: check box group'
-                    case "number":
-                        throw 'TODO'
-                    case "oneof":
-                        throw 'TODO'
-                }
-            } else {
-                switch (elementType.type) {
-                    case 'text':
-                        throw 'TODO'
-                    case 'date':
-                        throw 'TODO'
-                    case 'object':
-                        throw 'TODO'
-                    case "enum":
-                        throw 'TODO: check box group'
-                    case "number":
-                        throw 'TODO'
-                    case "oneof":
-                        throw 'TODO'
-                }
-            }
-            break
-    }
-    return <div></div>
-    // switch (field.type) {
-    //     case 'text': {
-    //         return <TextField fragment={value}/>
-    //     }
-    //     case 'richtext': {
-    //         return <RichTextField fragment={value}/>
-    //     }
-    //     case 'multilinetext': {
-    //         return <MultiLineTextField fragment={value}/>
-    //     }
-    //     case 'date': {
-    //         return <DateField onChange={setValue} value={value}/>
-    //     }
-    //     default:
-    //         throw 'unhandled'
-    // }
-}
-
-const ElementEditor = ({
-                           elementType,
-                           value,
-                           setValue
-                       }: { elementType: ElementType, value: any, setValue: any }): JSX.Element => {
-    switch (elementType.type) {
-        case 'text':
-            return <TextField fragment={value}/>
-        case 'date':
-            return <DateField onChange={setValue} value={value}/>
-        case 'object':
-            return <FieldsEditor fields={elementType.fields} ymap={value}/>
-        case "enum":
-            throw 'TODO'
-        case "number":
-            throw 'TODO'
-        case "oneof":
-            throw 'TODO'
-    }
-}
-

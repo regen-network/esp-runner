@@ -1,13 +1,9 @@
-import {FormSchema, ObjectType} from "./FormSchema";
+import {Field, FormSchema, ObjectType} from "./FormSchema";
 
-export const TextTypeType: ObjectType = {
-    type: "object",
-    fields: [],
-}
-
-export const DateTypeType: ObjectType = {
-    type: "object",
-    fields: [],
+const requiredField: Field = {
+    name: 'required',
+    label: 'Required',
+    type: {type: 'checkbox'}
 }
 
 export const FieldTypeType: ObjectType = {
@@ -15,47 +11,43 @@ export const FieldTypeType: ObjectType = {
     fields: [{
         name: 'name',
         label: 'Name',
-        cardinality: {type: 'one', required:true},
-        elementType: {type: 'text'},
+        type: {type: 'text', required: true},
     }, {
         name: 'label',
         label: 'Label',
-        cardinality: {type: 'one', required: true},
-        elementType: {type: 'text'},
+        type: {type: 'text', required: true},
     }, {
-        name: 'cardinality',
-        label: 'Cardinality',
-        cardinality: {type: 'one', required: true},
-        elementType: {
+        name: 'type',
+        label: 'Type',
+        type: {
             type: 'oneof',
+            required: true,
             choices: [{
                 name: 'text',
                 label: 'Text',
-                type: TextTypeType,
+                fields: [requiredField]
             }, {
                 name: 'date',
                 label: 'Date',
-                type: DateTypeType,
+                fields: [requiredField]
+            }, {
+                name: 'checkbox',
+                label: 'Checkbox'
             }]
         }
     }]
 }
 
-export const ObjectTypeType: ObjectType = {
-    type: "object",
-    fields: [{
-        name: "fields",
-        label: "Fields",
-        cardinality: {type: "many", ordered: true},
-        elementType: FieldTypeType
-    }],
-}
-
-export const FormSchemaSchema: FormSchema = {
-    fields: [{
-        name: 'fields',
-        label: 'Fields',
-        cardinality: {type: 'many', minCount: 1, ordered: true},
-        elementType: FieldTypeType,
-    }]
-};
+// export const ObjectTypeFields: Field[] = [{
+//     name: "fields",
+//     label: "Fields",
+// }]
+//
+// export const FormSchemaSchema: FormSchema = {
+//     fields: [{
+//         name: 'fields',
+//         label: 'Fields',
+//         cardinality: {type: 'many', minCount: 1, ordered: true},
+//         elementType: FieldTypeType,
+//     }]
+// };

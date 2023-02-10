@@ -1,44 +1,39 @@
-import {ElementType, FormSchema} from "./FormSchema";
+import {Field, FormSchema} from "./FormSchema";
 import * as Y from "yjs";
 
 export function initYMap(schema: FormSchema, ymap: Y.Map<any>) {
-    schema.fields.forEach(field => {
+    schema.pages.forEach(page => initYMapFields(page.fields, ymap))
+}
+
+export function initYMapFields(fields: Field[], ymap: Y.Map<any>) {
+    fields.forEach(field => {
         const key = field.name
         if (!ymap.has(key)) {
-            switch (field.cardinality.type) {
-                case 'one':
-                    const ty = yType(field.elementType)
-                    const val = new ty
-                    ymap.set(key, val)
+            const type = field.type
+            switch (type.type) {
+                case 'text':
+                case 'richtext':
+                    ymap.set(key, new Y.XmlFragment())
                     break
-                case 'many':
-                    if (field.cardinality.ordered) {
-                        const arr = new Y.Array
-                        ymap.set(key, arr)
+                case 'multiselect':
+                    ymap.set(key, new Y.Map())
+                    break
+                case 'object':
+                    const map = new Y.Map()
+                    initYMapFields(type.fields, map)
+                    ymap.set(key, map)
+                    break
+                case 'oneof':
+                    ymap.set(key, new Y.Map())
+                    break
+                case 'collection':
+                    if (type.ordered) {
+                        ymap.set(key, new Y.Array())
                     } else {
-                        if (yType(field.elementType)) {
-                            const arr = new Y.Array
-                            ymap.set(key, arr)
-                        } else {
-                            const map = new Y.Map
-                            ymap.set(key, map)
-                        }
+                        ymap.set(key, new Y.Map())
                     }
                     break
             }
-
         }
     })
 }
-
-const yType = (elementType: ElementType): any => {
-    switch (elementType.type) {
-        case 'text':
-            return Y.Text
-        case 'object':
-            return Y.Map
-        default:
-            return null
-    }
-}
-
