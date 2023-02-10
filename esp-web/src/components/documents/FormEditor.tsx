@@ -10,7 +10,7 @@ import {RichTextField} from "./fields/RichTextField";
 import {CheckBoxField} from "./fields/CheckboxField";
 import {MultiSelectField} from "./fields/MultiSelectField";
 import {SelectField} from "./fields/SelectField";
-import {Cell, Column, Form, Row, TableBody, TableHeader, TableView} from "@adobe/react-spectrum";
+import {Cell, Column, Form, Heading, Row, TableBody, TableHeader, TableView, View} from "@adobe/react-spectrum";
 
 export interface EditorProps {
     schema: FormSchema
@@ -71,14 +71,19 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
 }
 
 const ObjectField = ({fields, ymap, label}: { label: string, fields: Field[], ymap: Y.Map<any> }): JSX.Element => {
-    return <Form>
-        <h3>{label}</h3>
+    return <View
+        borderWidth="thin"
+        borderColor="dark"
+        borderRadius="medium"
+        padding="size-50"
+    >
+        <Heading level={3}>{label}</Heading>
         <React.Fragment>
             {fields.map((field) =>
                 <FormField key={field.name} field={field} ymap={ymap}/>
             )}
         </React.Fragment>
-    </Form>
+    </View>
 }
 
 const OrderedCollectionField = ({

@@ -114,17 +114,17 @@ const TestSchema: FormSchema = {
         label: "Page 2",
         fields: [
             {
-                name: 'text',
+                name: 'text2',
                 label: "Another text field",
                 type: {type: 'text'},
             },
             {
-                name: 'richtext',
+                name: 'richtext2',
                 label: "Another rich text editor",
                 type: {type: 'richtext'},
             },
             {
-                name: 'date',
+                name: 'date2',
                 label: "Another date field",
                 type: {type: 'date'},
             },

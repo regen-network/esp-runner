@@ -3,6 +3,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import * as Y from 'yjs';
 import {View} from "@adobe/react-spectrum";
+import styles from './styles.module.css';
 
 export interface RichTextFieldProps {
     label: string,
@@ -20,7 +21,7 @@ export const RichTextField = ({label, fragment}: RichTextFieldProps): JSX.Elemen
         }
     )
     return <View>
-        <label>{label}</label>
+        <label className={styles['field-label']}>{label}</label>
         <View
             borderWidth="thin"
             borderColor="dark"
