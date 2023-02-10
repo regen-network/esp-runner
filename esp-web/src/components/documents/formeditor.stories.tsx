@@ -97,8 +97,7 @@ const TestSchema: FormSchema = {
                 name: 'coll1',
                 label: "Ordered Collection",
                 type:{
-                    type:'collection',
-                    ordered:true,
+                    type:'ordered-collection',
                     fields:[{
                         name: 'name',
                         label: 'Name',

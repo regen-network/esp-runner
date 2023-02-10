@@ -5,6 +5,12 @@ import Text from '@tiptap/extension-text';
 import Collaboration from "@tiptap/extension-collaboration";
 import * as Y from 'yjs';
 import {FormControl, InputLabel, Input, FormHelperText} from "@mui/material";
+import '@spectrum-css/vars/dist/spectrum-global.css'
+import '@spectrum-css/vars/dist/spectrum-medium.css'
+import '@spectrum-css/vars/dist/spectrum-light.css'
+import '@spectrum-css/textfield/dist/index-vars.css'
+import {View} from '@adobe/react-spectrum'
+import './tiptap.css'
 
 const OneLiner = Node.create({
     name: "oneLiner",
@@ -28,7 +34,7 @@ export const TextField = ({fragment, label}: TextFieldProps): JSX.Element => {
         }
     )
     // return <FormControl><EditorContent editor={editor}/></FormControl>
-    return <div style={{border:'1px black solid'}}>
+    return <div>
         <label>{label}</label>
         <EditorContent editor={editor}/>
     </div>

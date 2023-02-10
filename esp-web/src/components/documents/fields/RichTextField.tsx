@@ -2,7 +2,7 @@ import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import * as Y from 'yjs';
-import {Box} from "@mui/material";
+import {View} from "@adobe/react-spectrum";
 
 export interface RichTextFieldProps {
     label: string,
@@ -19,8 +19,13 @@ export const RichTextField = ({label, fragment}: RichTextFieldProps): JSX.Elemen
             ],
         }
     )
-    return <div style={{border: '1px black solid'}}>
+    return <View>
         <label>{label}</label>
-        <EditorContent editor={editor}/>
-    </div>
+        <View
+            borderWidth="thin"
+            borderColor="dark"
+            borderRadius="medium">
+            <EditorContent editor={editor}/>
+        </View>
+    </View>
 }

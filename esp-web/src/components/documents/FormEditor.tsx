@@ -11,7 +11,6 @@ import {CheckBoxField} from "./fields/CheckboxField";
 import {MultiSelectField} from "./fields/MultiSelectField";
 import {SelectField} from "./fields/SelectField";
 import {Cell, Column, Form, Row, TableBody, TableHeader, TableView} from "@adobe/react-spectrum";
-import {CollectionField} from "./fields/CollectionField";
 
 export interface EditorProps {
     schema: FormSchema
@@ -63,14 +62,8 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
             return <SelectField label={field.label} value={value} onChange={setValue} selectValues={type.values}/>
         case 'object':
             return <ObjectField label={field.label} fields={type.fields} ymap={value}/>
-        case 'object':
-            return <ObjectField label={field.label} fields={type.fields} ymap={value}/>
-        case 'collection': {
-            if (type.ordered) {
-                return <OrderedCollectionField label={field.label} fields={type.fields} yarray={value}/>
-            } else {
-                throw 'TODO'
-            }
+        case 'ordered-collection': {
+            return <OrderedCollectionField label={field.label} fields={type.fields} yarray={value}/>
         }
         default:
             throw 'TODO'
@@ -93,23 +86,23 @@ const OrderedCollectionField = ({
                                     yarray,
                                     label
                                 }: { label: string, fields: Field[], yarray: Y.Array<any> }): JSX.Element => {
-    const elems = useYArray(yarray)
+    // const elems = useYArray(yarray)
     return <div>
-        <h3>{label}</h3>
-        <TableView>
-            <TableHeader>
-                {fields.map((field) =>
-                    <Column>{field.label}</Column>)}
-            </TableHeader>
-            <TableBody>
-                {elems.map(elem =>
-                    <Row>
-                        {fields.map((field) => {
-                            const [value, setValue] = useYMapValue(elem, field.name)
-                            return <Cell>{value}</Cell>
-                        })}
-                    </Row>)}
-            </TableBody>
-        </TableView>
+        {/*<h3>{label}</h3>*/}
+        {/*<TableView>*/}
+        {/*    <TableHeader>*/}
+        {/*        {fields.map((field) =>*/}
+        {/*            <Column>{field.label}</Column>)}*/}
+        {/*    </TableHeader>*/}
+        {/*    <TableBody>*/}
+        {/*        {elems.map(elem =>*/}
+        {/*            <Row>*/}
+        {/*                {fields.map((field) => {*/}
+        {/*                    const [value, setValue] = useYMapValue(elem, field.name)*/}
+        {/*                    return <Cell>{value}</Cell>*/}
+        {/*                })}*/}
+        {/*            </Row>)}*/}
+        {/*    </TableBody>*/}
+        {/*</TableView>*/}
     </div>
 }

@@ -16,6 +16,18 @@ specifiers:
   '@mui/x-date-pickers': ^5.0.18
   '@react-spectrum/label': ^3.10.1
   '@react-spectrum/provider': '>=3.0.0 <4.0.0'
+  '@react-spectrum/utils': ^3.8.1
+  '@spectrum-css/button': ^9.0.1
+  '@spectrum-css/checkbox': ^5.0.0
+  '@spectrum-css/fieldgroup': ^4.0.15
+  '@spectrum-css/fieldlabel': ^6.0.1
+  '@spectrum-css/helptext': ^3.0.0
+  '@spectrum-css/icon': ^3.0.21
+  '@spectrum-css/page': ^5.0.17
+  '@spectrum-css/radio': ^6.0.0
+  '@spectrum-css/textfield': ^3.2.13
+  '@spectrum-css/tokens': ^6.3.0
+  '@spectrum-css/vars': ^8.0.3
   '@storybook/addon-essentials': ^7.0.0-beta.44
   '@storybook/addon-interactions': ^7.0.0-beta.44
   '@storybook/addon-links': ^7.0.0-beta.44
@@ -36,10 +48,8 @@ specifiers:
   '@types/react-dom': ^18.0.10
   '@types/react-grid-layout': ^1.3.2
   '@vitejs/plugin-react': ^3.1.0
-  Add: link:@mui/icons-material/Add
   date-fns: ^2.29.3
   framer-motion: ^9.0.2
-  label: link:@adobe/react-spectrum/label
   prop-types: ^15.8.1
   prosemirror-model: ^1.7.1
   prosemirror-state: ^1.2.3
@@ -71,6 +81,18 @@ dependencies:
   '@mui/x-date-pickers': 5.0.18_czwmkttcqdr6ie5i2cvsfqec7u
   '@react-spectrum/label': 3.10.1_mhbkbg6p2kmny42kmw53kgwfxe
   '@react-spectrum/provider': 3.6.1_biqbaboplfbrettd7655fr4n2y
+  '@react-spectrum/utils': 3.8.1_react@18.2.0
+  '@spectrum-css/button': 9.0.1_@spectrum-css+tokens@6.3.0
+  '@spectrum-css/checkbox': 5.0.11_eyjqnepqmtoggadkoswvtgf7u4
+  '@spectrum-css/fieldgroup': 4.0.15_ycq6ckmbuwmdjtaw66grxuxpi4
+  '@spectrum-css/fieldlabel': 6.0.1_eyjqnepqmtoggadkoswvtgf7u4
+  '@spectrum-css/helptext': 3.0.13_eyjqnepqmtoggadkoswvtgf7u4
+  '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+  '@spectrum-css/page': 5.0.17
+  '@spectrum-css/radio': 6.0.10_eyjqnepqmtoggadkoswvtgf7u4
+  '@spectrum-css/textfield': 3.2.13_@spectrum-css+vars@8.0.3
+  '@spectrum-css/tokens': 6.3.0
+  '@spectrum-css/vars': 8.0.3
   '@tiptap/core': 2.0.0-beta.216_@tiptap+pm@2.0.0-beta.216
   '@tiptap/extension-collaboration': 2.0.0-beta.217_7okgzw7rvx6ci7cqd42qha2a7i
   '@tiptap/extension-collaboration-cursor': 2.0.0-beta.216_shvp5wpqqbf44efj3irx2e4mfy
@@ -80,10 +102,8 @@ dependencies:
   '@tiptap/pm': 2.0.0-beta.216_pmer27shfotwm74gjrzdl5eg2i
   '@tiptap/react': 2.0.0-beta.216_ntkxzhfak3d4s6hfonix3jrvri
   '@tiptap/starter-kit': 2.0.0-beta.216_@tiptap+pm@2.0.0-beta.216
-  Add: link:@mui/icons-material/Add
   date-fns: 2.29.3
   framer-motion: 9.0.2_biqbaboplfbrettd7655fr4n2y
-  label: link:@adobe/react-spectrum/label
   prosemirror-model: 1.19.0
   prosemirror-state: 1.4.2
   prosemirror-view: 1.30.1
@@ -6049,6 +6069,100 @@ packages:
   /@sinclair/typebox/0.25.21:
     resolution: {integrity: sha512-gFukHN4t8K4+wVC+ECqeqwzBDeFeTzBXroBTqE6vcWrQGbEUpHO7LYdG0f4xnvYq4VOEwITSlHlp0JBAIFMS/g==}
     dev: true
+
+  /@spectrum-css/button/9.0.1_@spectrum-css+tokens@6.3.0:
+    resolution: {integrity: sha512-3P6/VxIzDFL/BN1toS//Gfrcw+NrWPALsvQeeVbDO9o4w1rJjrjRyFnU5ns81BaHPQcsJXWZ6Cc6SM3e9cG4Ow==}
+    peerDependencies:
+      '@spectrum-css/tokens': ^6.3.0
+    dependencies:
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/checkbox/5.0.11_eyjqnepqmtoggadkoswvtgf7u4:
+    resolution: {integrity: sha512-M6qocr8wYPDWWhgT6qwYKMRRxBVD+hn+aA98wHC+6kloNV8dSTHmEDud/hAf2Rjzd6OSd05JdwPuReuRl0njyA==}
+    peerDependencies:
+      '@spectrum-css/icon': ^3.0.23
+      '@spectrum-css/tokens': ^6.0.0
+    dependencies:
+      '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/fieldgroup/4.0.15_ycq6ckmbuwmdjtaw66grxuxpi4:
+    resolution: {integrity: sha512-Fkati+6iu4TSe8SQWyje1oO75Y6j762re02SrAMQUc+6wVxmyBmQGq2RIdv5iqbGwHadf+cfwZZDlZjS7fjHkw==}
+    peerDependencies:
+      '@spectrum-css/checkbox': ^5.0.0
+      '@spectrum-css/helptext': ^3.0.0
+      '@spectrum-css/icon': ^3.0.21
+      '@spectrum-css/radio': ^6.0.0
+      '@spectrum-css/tokens': ^6.0.0
+    dependencies:
+      '@spectrum-css/checkbox': 5.0.11_eyjqnepqmtoggadkoswvtgf7u4
+      '@spectrum-css/helptext': 3.0.13_eyjqnepqmtoggadkoswvtgf7u4
+      '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+      '@spectrum-css/radio': 6.0.10_eyjqnepqmtoggadkoswvtgf7u4
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/fieldlabel/6.0.1_eyjqnepqmtoggadkoswvtgf7u4:
+    resolution: {integrity: sha512-hnZxg1hskG3tWUROyTV2xdaYKzoVPXVjWCLHKMtX41lddCt23DeP6NBTxSszkID32TZstHQVxjr3CV3mhEn2jg==}
+    peerDependencies:
+      '@spectrum-css/icon': ^3.0.21
+      '@spectrum-css/tokens': ^6.0.0
+    dependencies:
+      '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/helptext/3.0.13_eyjqnepqmtoggadkoswvtgf7u4:
+    resolution: {integrity: sha512-DZesxo+DboeljfeSdMxylorfyPKisNiod4hPybHBqbYm0bs+CGuEOsXhayTzK34Xfsh19kkDQieM62rANkhUCQ==}
+    peerDependencies:
+      '@spectrum-css/icon': ^3.0.23
+      '@spectrum-css/tokens': ^6.0.0
+    dependencies:
+      '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/icon/3.0.32_@spectrum-css+vars@8.0.3:
+    resolution: {integrity: sha512-aCcZwCoECeOTUK5PgULeNRYBEjRn3TXV5oRZ7y5MUUaAAdqAYRXm69XeGRBCcHODScOMal+AEfjxjrubHUpuZQ==}
+    peerDependencies:
+      '@spectrum-css/vars': ^8.0.0
+    dependencies:
+      '@spectrum-css/vars': 8.0.3
+    dev: false
+
+  /@spectrum-css/page/5.0.17:
+    resolution: {integrity: sha512-uzx/NapG6oyAa/JX3RL0Dn+DDFXbTqPKNANQ+cADbT5TVnH7URI3p8gPqYPjU2S/iBlo8/1tV0SBBflbw5d+PA==}
+    dependencies:
+      '@spectrum-css/vars': 8.0.3
+    dev: false
+
+  /@spectrum-css/radio/6.0.10_eyjqnepqmtoggadkoswvtgf7u4:
+    resolution: {integrity: sha512-s7BNlHPoRlczbgCqij7/W/XNMPO6fo5cNPnRo3jaZD02NFsZUkkViUNYJXyODKkAOqV9xjnEpySnykxMOUZfzg==}
+    peerDependencies:
+      '@spectrum-css/icon': ^3.0.21
+      '@spectrum-css/tokens': ^6.0.0
+    dependencies:
+      '@spectrum-css/icon': 3.0.32_@spectrum-css+vars@8.0.3
+      '@spectrum-css/tokens': 6.3.0
+    dev: false
+
+  /@spectrum-css/textfield/3.2.13_@spectrum-css+vars@8.0.3:
+    resolution: {integrity: sha512-K26LC+rINXbGhS2nF0FJDfA7Qe1qq7QbnQqURxeN/GUV1vaRbdVTPBtezyc2D1tGNwszELHTsDI8dGWWidpcLQ==}
+    peerDependencies:
+      '@spectrum-css/vars': ^8.0.0
+    dependencies:
+      '@spectrum-css/vars': 8.0.3
+    dev: false
+
+  /@spectrum-css/tokens/6.3.0:
+    resolution: {integrity: sha512-4dXI3B3YwWEQ2fN42fn4e9XADz81wVfIq0PSJp1mb//WUYd0flCHvhZSIu8vRU+UxYRCw7AZ3x/Pglokpk3KDw==}
+    dev: false
+
+  /@spectrum-css/vars/8.0.3:
+    resolution: {integrity: sha512-LoSPi5273u21O5ItFr3FuLZS3D0y9dlmJImmat8W66r6dPaFJhHDRAbIB93hGOk5mPxqrQb8guAUx7FmvZrbuQ==}
+    dev: false
 
   /@spectrum-icons/ui/3.4.2_mhbkbg6p2kmny42kmw53kgwfxe:
     resolution: {integrity: sha512-osQ9JQCNNimt2yi+QCGYUj10BbyxdYIhB3XGkzaprHtjrVhmwm0JAXv9BcwhRu4rrHDgzh4ElSRqVPV9IVOH1A==}
