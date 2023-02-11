@@ -2,7 +2,7 @@ import {RichTextField} from "../components/documents/fields/RichTextField";
 
 export interface FormSchema {
     pages: Page[]
-    objectTypes: NamedObjectType[]
+    objectTypes?: NamedObjectType[]
 }
 
 export interface NamedObjectType {
@@ -25,7 +25,8 @@ export interface ManyType {
 }
 
 export type Type =
-    TextType
+    StringType
+    | TextType
     | RichTextType
     | NumberType
     | DateType
@@ -117,4 +118,8 @@ export interface CheckboxType {
 
 export interface RichTextType {
     type: 'richtext'
+}
+
+export interface StringType {
+    type: 'string'
 }

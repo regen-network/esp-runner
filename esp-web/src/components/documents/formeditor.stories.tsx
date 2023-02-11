@@ -108,6 +108,22 @@ const TestSchema: FormSchema = {
                         type: {type: 'date'}
                     }]
                 }
+            },
+            {
+                name: 'coll2',
+                label: "Keyed Collection",
+                type:{
+                    type:'keyed-collection',
+                    fields:[{
+                        name: 'desc',
+                        label: 'Description',
+                        type: {type: 'text'}
+                    }, {
+                        name: 'start-date',
+                        label: 'Start Date',
+                        type: {type: 'date'}
+                    }]
+                }
             }
         ]
     }, {
