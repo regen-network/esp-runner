@@ -16,6 +16,7 @@ import {
     Form, Heading, Item, Row, TableBody, TableHeader, TableView, View,
     TextField as SpectrumTextField, Picker
 } from "@adobe/react-spectrum";
+import {resolveFields, SchemaContext} from '../../model/SchemaContext';
 
 export interface EditorProps {
     schema: FormSchema
@@ -26,14 +27,15 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     initYMap(schema, ymap)
     if (schema.pages.length == 1) {
         const page = schema.pages[0]
-        return <Box sx={{width: '100%'}}>
-            {page.fields.map((field) =>
-                <FormField key={field.name} field={field} ymap={ymap}/>
-            )}
-        </Box>
+        return <SchemaContext.Provider value={schema}>
+            <Box sx={{width: '100%'}}>
+                {page.fields.map((field) =>
+                    <FormField key={field.name} field={field} ymap={ymap}/>
+                )}
+            </Box></SchemaContext.Provider>
     } else {
         const [activeStep, setActiveStep] = React.useState(0);
-        return <Box>
+        return <SchemaContext.Provider value={schema}><Box>
             <Stepper nonLinear activeStep={activeStep}>
                 {schema.pages.map((page, index) => <Step key={index}>
                     <StepButton onClick={() => setActiveStep(index)}>{page.label}</StepButton>
@@ -45,6 +47,7 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
                 )}
             </Form>
         </Box>
+        </SchemaContext.Provider>
     }
 
 }
@@ -68,15 +71,15 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         case 'select':
             return <SelectField label={field.label} value={value} onChange={setValue} selectValues={type.values}/>
         case 'object':
-            return <ObjectField label={field.label} fields={type.fields} ymap={value}/>
+            return <ObjectField label={field.label} fields={resolveFields(type.objectDef)} ymap={value}/>
         case 'ordered-collection':
-            return <OrderedCollectionField label={field.label} fields={type.fields} yarray={value}/>
+            return <OrderedCollectionField label={field.label} fields={resolveFields(type.objectDef)} yarray={value}/>
         case 'keyed-collection' :
-            return <KeyedCollectionField label={field.label} fields={type.fields} ymap={value}
+            return <KeyedCollectionField label={field.label} fields={resolveFields(type.objectDef)} ymap={value}
                                          idFieldLabel={type.keyLabel}
             />
-        case 'oneof':{
-            const choiceMap:{[type:string]:OneOfChoiceType} = {}
+        case 'oneof': {
+            const choiceMap: { [type: string]: OneOfChoiceType } = {}
             type.choices.forEach(choice => choiceMap[choice.name] = choice)
             return <OneOfField label={field.label} type={type} ymap={value} choiceMap={choiceMap}/>
         }
@@ -282,9 +285,9 @@ const OneOfField = ({
                     }: { label: string, type: OneOfType, choiceMap: { [type: string]: OneOfChoiceType }, ymap: Y.Map<any> }): JSX.Element => {
     const [typeValue, setTypeValue] = useYMapValue(ymap, 'type')
     const choice = choiceMap[typeValue]
-    let fields:Field[] = []
-    if (choice && choice.fields) {
-        fields = choice.fields
+    let fields: Field[] = []
+    if (choice && choice.objectDef) {
+        fields = resolveFields(choice.objectDef)
     }
     return <View
         borderWidth="thin"
@@ -296,8 +299,8 @@ const OneOfField = ({
                     ymap.clear()
                     const choice = choiceMap[sel]
                     setTypeValue(choice.name)
-                    if (choice.fields) {
-                        initYMapFields(choice.fields, ymap)
+                    if (choice.objectDef) {
+                        initYMapFields(resolveFields(choice.objectDef), ymap)
                     }
                 }}
         >
@@ -307,7 +310,7 @@ const OneOfField = ({
         </Picker>
         <React.Fragment>
             {fields.map(field =>
-                <FormField key={typeValue + '_' + field.name} field={field} ymap={ymap} />
+                <FormField key={typeValue + '_' + field.name} field={field} ymap={ymap}/>
             )}
         </React.Fragment>
     </View>

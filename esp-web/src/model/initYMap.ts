@@ -1,5 +1,6 @@
 import {Field, FormSchema} from "./FormSchema";
 import * as Y from "yjs";
+import {resolveFields} from "./SchemaContext";
 
 export function initYMap(schema: FormSchema, ymap: Y.Map<any>) {
     schema.pages.forEach(page => initYMapFields(page.fields, ymap))
@@ -20,7 +21,7 @@ export function initYMapFields(fields: Field[], ymap: Y.Map<any>) {
                     break
                 case 'object':
                     const map = new Y.Map()
-                    initYMapFields(type.fields, map)
+                    initYMapFields(resolveFields(type.objectDef), map)
                     ymap.set(key, map)
                     break
                 case 'oneof':

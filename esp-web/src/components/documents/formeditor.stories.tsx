@@ -5,6 +5,7 @@ import * as Y from "yjs";
 import {Stack} from "@mui/material";
 import {Field, FormSchema} from "../../model/FormSchema";
 import {initYMap} from "../../model/initYMap";
+import {FormSchemaSchema} from "../../model/FormSchemaSchema";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 export default {
@@ -87,15 +88,18 @@ const TestSchema: FormSchema = {
                 label: 'Object',
                 type: {
                     type: 'object',
-                    fields: [{
-                        name: 'name',
-                        label: 'Name',
-                        type: {type: 'text'}
-                    }, {
-                        name: 'birthday',
-                        label: 'Birthday',
-                        type: {type: 'date'}
-                    }]
+                    objectDef: {
+                        type: 'fields-def',
+                        fields: [{
+                            name: 'name',
+                            label: 'Name',
+                            type: {type: 'text'}
+                        }, {
+                            name: 'birthday',
+                            label: 'Birthday',
+                            type: {type: 'date'}
+                        }]
+                    }
                 }
             },
             {
@@ -106,18 +110,24 @@ const TestSchema: FormSchema = {
                     choices: [{
                         name: 'text',
                         label: 'Text',
-                        fields: [
-                            requiredField,
-                            {
-                                name:'format',
-                                label:'Format',
-                                type:{type:'string'}
-                            }
-                        ]
+                        objectDef: {
+                            type: 'fields-def',
+                            fields: [
+                                requiredField,
+                                {
+                                    name: 'format',
+                                    label: 'Format',
+                                    type: {type: 'string'}
+                                }
+                            ]
+                        }
                     }, {
                         name: 'date',
                         label: 'Date',
-                        fields: [requiredField]
+                        objectDef: {
+                            type: 'fields-def',
+                            fields: [requiredField]
+                        }
                     }, {
                         name: 'checkbox',
                         label: 'Checkbox'
@@ -129,15 +139,18 @@ const TestSchema: FormSchema = {
                 label: "Ordered Collection",
                 type: {
                     type: 'ordered-collection',
-                    fields: [{
-                        name: 'name',
-                        label: 'Name',
-                        type: {type: 'text'}
-                    }, {
-                        name: 'birthday',
-                        label: 'Birthday',
-                        type: {type: 'date'}
-                    }]
+                    objectDef: {
+                        type: 'fields-def',
+                        fields: [{
+                            name: 'name',
+                            label: 'Name',
+                            type: {type: 'text'}
+                        }, {
+                            name: 'birthday',
+                            label: 'Birthday',
+                            type: {type: 'date'}
+                        }]
+                    }
                 }
             },
             {
@@ -145,15 +158,18 @@ const TestSchema: FormSchema = {
                 label: "Keyed Collection",
                 type: {
                     type: 'keyed-collection',
-                    fields: [{
-                        name: 'desc',
-                        label: 'Description',
-                        type: {type: 'text'}
-                    }, {
-                        name: 'start-date',
-                        label: 'Start Date',
-                        type: {type: 'date'}
-                    }]
+                    objectDef: {
+                        type: 'fields-def',
+                        fields: [{
+                            name: 'desc',
+                            label: 'Description',
+                            type: {type: 'text'}
+                        }, {
+                            name: 'start-date',
+                            label: 'Start Date',
+                            type: {type: 'date'}
+                        }]
+                    }
                 }
             },
         ]
@@ -215,5 +231,17 @@ export const Collab = {
                 ><Text>Dump JSON</Text></Button>
             </Stack>
         </SpectrumProvider>
+    },
+};
+
+export const Form = {
+    name: 'Form',
+    render: () => {
+        const doc = new Y.Doc()
+        return <SpectrumProvider theme={defaultTheme}>
+            <FormEditor
+                schema={FormSchemaSchema}
+                ymap={doc.getMap()}
+            /></SpectrumProvider>
     },
 };

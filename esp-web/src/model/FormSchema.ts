@@ -1,13 +1,11 @@
-import {RichTextField} from "../components/documents/fields/RichTextField";
-
 export interface FormSchema {
     pages: Page[]
-    objectTypes?: NamedObjectType[]
+    objectTypes?: {[id:string]:NamedObjectType}
 }
 
 export interface NamedObjectType {
-    '@id': string
-    fields:Field[]
+    id: string
+    fields: Field[]
 }
 
 export interface Page {
@@ -37,11 +35,12 @@ export type Type =
     | OrderedCollectionType
     | KeyedCollectionType
     | OneOfType
+    | RefType
 
 
 export interface ObjectType {
     type: 'object'
-    fields: Field[]
+    objectDef: ObjectDef
 }
 
 export interface OneOfType extends OneType {
@@ -52,7 +51,7 @@ export interface OneOfType extends OneType {
 export interface OneOfChoiceType {
     name: string
     label: string
-    fields?: Field[]
+    objectDef?: ObjectDef
 }
 
 export interface Field {
@@ -90,21 +89,13 @@ export interface DateType extends OneType {
 
 export interface OrderedCollectionType extends ManyType {
     type: 'ordered-collection'
-    fields: Field[]
-}
-
-export interface ObjectTypeDefinition {
-    field:Field[]
-}
-
-export interface NamedObjectTypeRef {
-    name:String
+    objectDef: ObjectDef
 }
 
 export interface KeyedCollectionType extends ManyType {
     type: 'keyed-collection'
     keyLabel?: string
-    fields:Field[]
+    objectDef: ObjectDef
 }
 
 export interface MultiSelectType extends ManyType {
@@ -122,4 +113,21 @@ export interface RichTextType {
 
 export interface StringType {
     type: 'string'
+}
+
+export interface RefType {
+    type: 'ref'
+    refType: string
+}
+
+export type ObjectDef = FieldsDefinition | ObjectRef
+
+export interface FieldsDefinition {
+    type: 'fields-def'
+    fields: Field[]
+}
+
+export interface ObjectRef {
+    type: 'object-ref'
+    ref: string
 }
