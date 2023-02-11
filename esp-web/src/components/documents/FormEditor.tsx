@@ -28,25 +28,27 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     if (schema.pages.length == 1) {
         const page = schema.pages[0]
         return <SchemaContext.Provider value={schema}>
-            <Box sx={{width: '100%'}}>
+            <View>
                 {page.fields.map((field) =>
                     <FormField key={field.name} field={field} ymap={ymap}/>
                 )}
-            </Box></SchemaContext.Provider>
+            </View></SchemaContext.Provider>
     } else {
         const [activeStep, setActiveStep] = React.useState(0);
-        return <SchemaContext.Provider value={schema}><Box>
+        return <SchemaContext.Provider value={schema}><View>
             <Stepper nonLinear activeStep={activeStep}>
                 {schema.pages.map((page, index) => <Step key={index}>
                     <StepButton onClick={() => setActiveStep(index)}>{page.label}</StepButton>
                 </Step>)}
             </Stepper>
             <Form>
-                {schema.pages[activeStep].fields.map((field) =>
-                    <FormField key={field.name} field={field} ymap={ymap}/>
-                )}
+                <View>
+                    {schema.pages[activeStep].fields.map((field) =>
+                        <FormField key={field.name} field={field} ymap={ymap}/>
+                    )}
+                </View>
             </Form>
-        </Box>
+        </View>
         </SchemaContext.Provider>
     }
 
