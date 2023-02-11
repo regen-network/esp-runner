@@ -26,12 +26,11 @@ export function initYMapFields(fields: Field[], ymap: Y.Map<any>) {
                 case 'oneof':
                     ymap.set(key, new Y.Map())
                     break
-                case 'collection':
-                    if (type.ordered) {
-                        ymap.set(key, new Y.Array())
-                    } else {
-                        ymap.set(key, new Y.Map())
-                    }
+                case 'ordered-collection':
+                    ymap.set(key, new Y.Array())
+                    break
+                case 'keyed-collection':
+                    ymap.set(key, new Y.Map())
                     break
             }
         }

@@ -1,7 +1,7 @@
 import GridLayout from "react-grid-layout";
 import * as Y from 'yjs';
 import {FormEditor} from "./FormEditor";
-import {useYMapJSON} from "../../yutil";
+import {useYJSON} from "../../yutil";
 import {Stack} from "@mui/material";
 import {FormSchema} from "../../model/FormSchema";
 
@@ -26,7 +26,7 @@ export const SchemaEditor = ({ymap}: SchemaEditorProps): JSX.Element => {
     const examples = ymap.get('examples')
 
     const tempDoc = new Y.Doc()
-    const schemaJSON = useYMapJSON(schema)
+    const schemaJSON = useYJSON(schema)
 
     return (
         <Stack direction="row">

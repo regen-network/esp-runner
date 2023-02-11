@@ -1,4 +1,4 @@
-import {EditorContent, useEditor} from "@tiptap/react";
+import {Editor, EditorContent, useEditor} from "@tiptap/react";
 import {Node} from "@tiptap/core";
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
@@ -32,9 +32,16 @@ export const TextField = ({fragment, label}: TextFieldProps): JSX.Element => {
             ],
         }
     )
-    // return <FormControl><EditorContent editor={editor}/></FormControl>
     return <div>
         <label className={styles['field-label']}>{label}</label>
         <EditorContent editor={editor}/>
     </div>
+}
+
+export function getTextFieldText(content: string): string {
+    const editor = new Editor({
+        extensions: [ OneLiner, Text, Paragraph, ],
+        content
+    })
+    return editor.getText()
 }

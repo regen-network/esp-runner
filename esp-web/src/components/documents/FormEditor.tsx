@@ -1,16 +1,20 @@
 import * as Y from 'yjs';
-import {useYArray, useYMapValue} from "../../yutil";
-import {TextField} from "./fields/TextField";
+import {useYArray, useYArrayJSON, useYJSON, useYMapValue} from "../../yutil";
+import {getTextFieldText, TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
-import {Field, FormSchema} from "../../model/FormSchema";
-import {initYMap} from "../../model/initYMap";
-import {Box, Checkbox, FormControlLabel, Step, StepButton, Stepper} from "@mui/material";
-import React from "react";
+import {Field, FormSchema, Type} from "../../model/FormSchema";
+import {initYMap, initYMapFields} from "../../model/initYMap";
+import {Box, Step, StepButton, Stepper} from "@mui/material";
+import React, {Key, useState} from "react";
 import {RichTextField} from "./fields/RichTextField";
 import {CheckBoxField} from "./fields/CheckboxField";
 import {MultiSelectField} from "./fields/MultiSelectField";
 import {SelectField} from "./fields/SelectField";
-import {Cell, Column, Form, Heading, Row, TableBody, TableHeader, TableView, View} from "@adobe/react-spectrum";
+import {
+    ActionGroup, Button, ButtonGroup,
+    Cell, Column, Content, Dialog, DialogContainer, Divider, Flex,
+    Form, Heading, Item, Row, TableBody, TableHeader, TableView, View
+} from "@adobe/react-spectrum";
 
 export interface EditorProps {
     schema: FormSchema
@@ -90,24 +94,188 @@ const OrderedCollectionField = ({
                                     fields,
                                     yarray,
                                     label
-                                }: { label: string, fields: Field[], yarray: Y.Array<any> }): JSX.Element => {
-    // const elems = useYArray(yarray)
-    return <div>
-        {/*<h3>{label}</h3>*/}
-        {/*<TableView>*/}
-        {/*    <TableHeader>*/}
-        {/*        {fields.map((field) =>*/}
-        {/*            <Column>{field.label}</Column>)}*/}
-        {/*    </TableHeader>*/}
-        {/*    <TableBody>*/}
-        {/*        {elems.map(elem =>*/}
-        {/*            <Row>*/}
-        {/*                {fields.map((field) => {*/}
-        {/*                    const [value, setValue] = useYMapValue(elem, field.name)*/}
-        {/*                    return <Cell>{value}</Cell>*/}
-        {/*                })}*/}
-        {/*            </Row>)}*/}
-        {/*    </TableBody>*/}
-        {/*</TableView>*/}
-    </div>
+                                }: { label: string, fields: Field[], yarray: Y.Array<Y.Map<any>> }): JSX.Element => {
+    const json: Array<any> = useYJSON(yarray)
+    const [activeItem, setActiveItem] = useState(new Y.Map())
+    const [dialogState, setDialogState] = useState<string | null>()
+    const stringableFields = fields.filter(field => isStringableType(field.type))
+    const [selectedFields, setSelectedFields] = useState<Set<Key> | 'all'>()
+    return <View
+        borderWidth="thin"
+        borderColor="dark"
+        borderRadius="medium"
+        padding="size-50"
+    >
+        <Heading level={3}>{label}</Heading>
+        <TableView selectionMode="multiple" onSelectionChange={e => setSelectedFields(e)}
+                   onAction={key => {
+                       setActiveItem(yarray.get(key as number))
+                       setDialogState('edit')
+                   }}
+        >
+            <TableHeader>
+                {stringableFields.map((field) =>
+                    <Column>{field.label}</Column>)}
+            </TableHeader>
+            <TableBody>
+                {json.map((elem, idx) =>
+                    <Row key={idx}>
+                        {stringableFields.map((field) => <Cell>{valueToString(field.type, elem[field.name])}</Cell>)}
+                    </Row>)}
+            </TableBody>
+        </TableView>
+        <Flex direction="column">
+            <ActionGroup onAction={action => {
+                switch (action) {
+                    case 'add':
+                        const x = new Y.Map()
+                        initYMapFields(fields, x)
+                        setDialogState('edit')
+                        yarray.push([x])
+                        setActiveItem(x)
+                        break
+                    case 'remove':
+                        if (selectedFields == 'all') {
+                            yarray.delete(0, yarray.length)
+                        } else {
+                            selectedFields?.forEach(key => {
+                                yarray.delete(key as number, 1)
+                            })
+                        }
+                }
+            }}>
+                <Item key="add">Add</Item>
+                <Item key="remove">Remove</Item>
+            </ActionGroup>
+            <DialogContainer onDismiss={() => {
+                setDialogState(null)
+            }} isDismissable={true} type="fullscreen">
+                {dialogState === 'edit' &&
+                    <Dialog>
+                        <Heading>Edit</Heading>
+                        <Divider/>
+                        <Content>
+                            {fields.map((field) =>
+                                <FormField key={field.name} field={field} ymap={activeItem}/>
+                            )}
+                        </Content>
+                        <ButtonGroup>
+                            <Button variant="primary" onPress={_ => setDialogState(null)}>Done</Button>
+                        </ButtonGroup>
+                    </Dialog>}
+            </DialogContainer>
+        </Flex>
+    </View>
+}
+
+const KeyedCollectionField = ({
+                                  fields,
+                                  ymap,
+                                  label
+                              }: { label: string, fields: Field[], ymap: Y.Map<any> }): JSX.Element => {
+}
+
+const CollectionField = ({
+                             fields,
+                             yany,
+                             label,
+                             getItem,
+                             addItem,
+    deleteItems,
+                         }: {
+    label: string, fields: Field[], yany: Y.AbstractType<any>,
+    getItem: (key: Key) => any,
+    addItem: (x: any) => void,
+    deleteItems: (items: Set<Key> | 'all') => void,
+
+}): JSX.Element => {
+    const json: Array<any> = useYJSON(yany)
+    const [activeItem, setActiveItem] = useState(new Y.Map())
+    const [dialogState, setDialogState] = useState<string | null>()
+    const stringableFields = fields.filter(field => isStringableType(field.type))
+    const [selectedFields, setSelectedFields] = useState<Set<Key> | 'all'>()
+    return <View
+        borderWidth="thin"
+        borderColor="dark"
+        borderRadius="medium"
+        padding="size-50"
+    >
+        <Heading level={3}>{label}</Heading>
+        <TableView selectionMode="multiple" onSelectionChange={e => setSelectedFields(e)}
+                   onAction={key => {
+                       setActiveItem(getItem(key))
+                       setDialogState('edit')
+                   }}
+        >
+            <TableHeader>
+                {stringableFields.map((field) =>
+                    <Column>{field.label}</Column>)}
+            </TableHeader>
+            <TableBody>
+                {json.map((elem, idx) =>
+                    <Row key={idx}>
+                        {stringableFields.map((field) => <Cell>{valueToString(field.type, elem[field.name])}</Cell>)}
+                    </Row>)}
+            </TableBody>
+        </TableView>
+        <Flex direction="column">
+            <ActionGroup onAction={action => {
+                switch (action) {
+                    case 'add':
+                        const x = new Y.Map()
+                        initYMapFields(fields, x)
+                        setDialogState('edit')
+                        addItem(x)
+                        setActiveItem(x)
+                        break
+                    case 'remove':
+                        if (selectedFields) {
+                            deleteItems(selectedFields)
+                        }
+                        break
+                }
+            }}>
+                <Item key="add">Add</Item>
+                <Item key="remove">Remove</Item>
+            </ActionGroup>
+            <DialogContainer onDismiss={() => {
+                setDialogState(null)
+            }} isDismissable={true} type="fullscreen">
+                {dialogState === 'edit' &&
+                    <Dialog>
+                        <Heading>Edit</Heading>
+                        <Divider/>
+                        <Content>
+                            {fields.map((field) =>
+                                <FormField key={field.name} field={field} ymap={activeItem}/>
+                            )}
+                        </Content>
+                        <ButtonGroup>
+                            <Button variant="primary" onPress={_ => setDialogState(null)}>Done</Button>
+                        </ButtonGroup>
+                    </Dialog>}
+            </DialogContainer>
+        </Flex>
+    </View>
+}
+
+function isStringableType(type: Type): boolean {
+    switch (type.type) {
+        case 'text':
+        case 'date':
+            return true
+        default:
+            return false
+    }
+}
+
+function valueToString(type: Type, value: any): any {
+    switch (type.type) {
+        case 'text':
+            return getTextFieldText(value)
+        case 'date':
+            return value
+        default:
+            return ""
+    }
 }
