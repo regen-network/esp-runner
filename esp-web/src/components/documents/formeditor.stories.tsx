@@ -3,8 +3,7 @@ import {Button, Text, defaultTheme, Provider as SpectrumProvider} from '@adobe/r
 import {FormEditor} from "./FormEditor";
 import * as Y from "yjs";
 import {Stack} from "@mui/material";
-import {FormSchema} from "../../model/FormSchema";
-import {ChakraProvider} from '@chakra-ui/react'
+import {Field, FormSchema} from "../../model/FormSchema";
 import {initYMap} from "../../model/initYMap";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
@@ -12,6 +11,12 @@ export default {
     title: 'Documents/FormEditor',
     component: FormEditor,
 } satisfies Meta<typeof FormEditor>;
+
+const requiredField: Field = {
+    name: 'required',
+    label: 'Required',
+    type: {type: 'checkbox'}
+}
 
 const TestSchema: FormSchema = {
     pages: [{
@@ -94,11 +99,37 @@ const TestSchema: FormSchema = {
                 }
             },
             {
+                name: 'oneof1',
+                label: "A One-of",
+                type: {
+                    type: 'oneof',
+                    choices: [{
+                        name: 'text',
+                        label: 'Text',
+                        fields: [
+                            requiredField,
+                            {
+                                name:'format',
+                                label:'Format',
+                                type:{type:'string'}
+                            }
+                        ]
+                    }, {
+                        name: 'date',
+                        label: 'Date',
+                        fields: [requiredField]
+                    }, {
+                        name: 'checkbox',
+                        label: 'Checkbox'
+                    },]
+                }
+            },
+            {
                 name: 'coll1',
                 label: "Ordered Collection",
-                type:{
-                    type:'ordered-collection',
-                    fields:[{
+                type: {
+                    type: 'ordered-collection',
+                    fields: [{
                         name: 'name',
                         label: 'Name',
                         type: {type: 'text'}
@@ -112,9 +143,9 @@ const TestSchema: FormSchema = {
             {
                 name: 'coll2',
                 label: "Keyed Collection",
-                type:{
-                    type:'keyed-collection',
-                    fields:[{
+                type: {
+                    type: 'keyed-collection',
+                    fields: [{
                         name: 'desc',
                         label: 'Description',
                         type: {type: 'text'}
@@ -124,7 +155,7 @@ const TestSchema: FormSchema = {
                         type: {type: 'date'}
                     }]
                 }
-            }
+            },
         ]
     }, {
         label: "Page 2",
@@ -169,16 +200,16 @@ export const Collab = {
         initYMap(TestSchema, map)
         return <SpectrumProvider theme={defaultTheme}>
             <Stack>
-            <Stack direction="row">
-                <FormEditor
-                    schema={TestSchema}
-                    ymap={map}
-                />
-                <FormEditor
-                    schema={TestSchema}
-                    ymap={map}
-                />
-            </Stack>
+                <Stack direction="row">
+                    <FormEditor
+                        schema={TestSchema}
+                        ymap={map}
+                    />
+                    <FormEditor
+                        schema={TestSchema}
+                        ymap={map}
+                    />
+                </Stack>
                 <Button variant="primary"
                         onPress={() => console.log(map.toJSON())}
                 ><Text>Dump JSON</Text></Button>

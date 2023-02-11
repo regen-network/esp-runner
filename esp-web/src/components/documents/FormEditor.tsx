@@ -1,8 +1,8 @@
 import * as Y from 'yjs';
-import {useYArray, useYJSON, useYMapValue} from "../../yutil";
+import {useYJSON, useYMapValue} from "../../yutil";
 import {getTextFieldText, TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
-import {Field, FormSchema, Type} from "../../model/FormSchema";
+import {Field, FormSchema, OneOfChoiceType, OneOfType, Type} from "../../model/FormSchema";
 import {initYMap, initYMapFields} from "../../model/initYMap";
 import {Box, Step, StepButton, Stepper} from "@mui/material";
 import React, {Key, useState} from "react";
@@ -14,7 +14,7 @@ import {
     ActionGroup, Button, ButtonGroup,
     Cell, Column, Content, Dialog, DialogContainer, Divider, Flex,
     Form, Heading, Item, Row, TableBody, TableHeader, TableView, View,
-    TextField as SpectrumTextField
+    TextField as SpectrumTextField, Picker
 } from "@adobe/react-spectrum";
 
 export interface EditorProps {
@@ -75,6 +75,11 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
             return <KeyedCollectionField label={field.label} fields={type.fields} ymap={value}
                                          idFieldLabel={type.keyLabel}
             />
+        case 'oneof':{
+            const choiceMap:{[type:string]:OneOfChoiceType} = {}
+            type.choices.forEach(choice => choiceMap[choice.name] = choice)
+            return <OneOfField label={field.label} type={type} ymap={value} choiceMap={choiceMap}/>
+        }
         default:
             throw 'TODO'
     }
@@ -267,4 +272,43 @@ function valueToString(type: Type, value: any): any {
         default:
             return ""
     }
+}
+
+const OneOfField = ({
+                        label,
+                        type,
+                        choiceMap,
+                        ymap
+                    }: { label: string, type: OneOfType, choiceMap: { [type: string]: OneOfChoiceType }, ymap: Y.Map<any> }): JSX.Element => {
+    const [typeValue, setTypeValue] = useYMapValue(ymap, 'type')
+    const choice = choiceMap[typeValue]
+    let fields:Field[] = []
+    if (choice && choice.fields) {
+        fields = choice.fields
+    }
+    return <View
+        borderWidth="thin"
+        borderColor="dark"
+        borderRadius="medium"
+        padding="size-50">
+        <Picker label={label} selectedKey={typeValue}
+                onSelectionChange={sel => {
+                    ymap.clear()
+                    const choice = choiceMap[sel]
+                    setTypeValue(choice.name)
+                    if (choice.fields) {
+                        initYMapFields(choice.fields, ymap)
+                    }
+                }}
+        >
+            {type.choices.map(choice =>
+                <Item key={choice.name}>{choice.label}</Item>
+            )}
+        </Picker>
+        <React.Fragment>
+            {fields.map(field =>
+                <FormField key={typeValue + '_' + field.name} field={field} ymap={ymap} />
+            )}
+        </React.Fragment>
+    </View>
 }
