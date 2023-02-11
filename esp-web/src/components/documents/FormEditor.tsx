@@ -14,7 +14,7 @@ import {
     ActionGroup, Button, ButtonGroup,
     Cell, Column, Content, Dialog, DialogContainer, Divider, Flex,
     Form, Heading, Item, Row, TableBody, TableHeader, TableView, View,
-    TextField as SpectrumTextField, Picker
+    TextField as SpectrumTextField, Picker, useProvider
 } from "@adobe/react-spectrum";
 import {resolveFields, SchemaContext} from '../../model/SchemaContext';
 
@@ -204,7 +204,7 @@ const CollectionField = ({fields, yany, label, getItem, addItem, deleteItems, ma
         >
             <TableHeader>
                 {stringableFields.map((field) =>
-                    <Column>{field.label}</Column>)}
+                    <Column key={field.name}>{field.label}</Column>)}
             </TableHeader>
             <TableBody>
                 {map(json, (elem, idx) =>

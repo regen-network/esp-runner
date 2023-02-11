@@ -8,8 +8,9 @@ import '@spectrum-css/vars/dist/spectrum-global.css'
 import '@spectrum-css/vars/dist/spectrum-medium.css'
 import '@spectrum-css/vars/dist/spectrum-light.css'
 import '@spectrum-css/textfield/dist/index-vars.css'
-import styles from './styles.module.css';
 import './tiptap.css'
+import {FieldLabel} from "./FieldLabel";
+import {useId} from "react";
 
 const OneLiner = Node.create({
     name: "oneLiner",
@@ -32,8 +33,9 @@ export const TextField = ({fragment, label}: TextFieldProps): JSX.Element => {
             ],
         }
     )
-    return <div>
-        <label className={styles['field-label']}>{label}</label>
+    const labelId = useId()
+    return <div >
+        <FieldLabel id={labelId} label={label} />
         <EditorContent editor={editor}/>
     </div>
 }

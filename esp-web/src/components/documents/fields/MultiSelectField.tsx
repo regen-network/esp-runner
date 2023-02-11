@@ -1,14 +1,10 @@
 import {Checkbox, useProvider} from '@adobe/react-spectrum'
-import React from "react";
+import React, {useContext, useId} from "react";
 import * as Y from 'yjs';
 import {SelectValue} from "../../../model/FormSchema";
 import {useYMapValue} from "../../../yutil";
-import styles from './styles.module.css';
-import '@spectrum-css/vars/dist/spectrum-global.css'
-import '@spectrum-css/vars/dist/spectrum-medium.css'
-import '@spectrum-css/vars/dist/spectrum-light.css'
-import '@spectrum-css/fieldgroup/dist/index-vars.css';
-import '@spectrum-css/fieldlabel/dist/index-vars.css';
+import {spectrumClassName} from "../../../spectrumUtil";
+import {FieldLabel} from "./FieldLabel";
 
 export interface MultiSelectFieldProps {
     label: string
@@ -17,8 +13,12 @@ export interface MultiSelectFieldProps {
 }
 
 export const MultiSelectField = ({label, ymap, selectValues}: MultiSelectFieldProps): JSX.Element => {
-    return <div className="spectrum-FieldGroup spectrum-FieldGroup--toplabel spectrum-FieldGroup--vertical" role="group">
-        <span className={styles['field-label']}>{label}</span>
+    const ctx = useProvider()
+    const labelId = useId()
+    return <div className={spectrumClassName(ctx, 'spectrum-FieldGroup', 'spectrum-FieldGroup--toplabel', 'spectrum-FieldGroup--vertical')} role="group"
+                aria-labelledby={labelId}
+    >
+        <FieldLabel id={labelId} label={label}/>
         {selectValues.map(value => {
             const [checked] = useYMapValue(ymap, value.value)
             return <Checkbox key={value.value} value={value.value} onChange={isSelected => {
