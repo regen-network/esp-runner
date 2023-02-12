@@ -6,6 +6,7 @@ import {Stack} from "@mui/material";
 import {Field, FormSchema} from "../../model/FormSchema";
 import {initYMap} from "../../model/initYMap";
 import {FormSchemaSchema} from "../../model/FormSchemaSchema";
+import {jsonifyYMapJSON} from "../../model/yMapToJson";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 export default {
@@ -37,6 +38,16 @@ const TestSchema: FormSchema = {
                 name: 'richtext',
                 label: "Rich text",
                 type: {type: 'richtext'},
+            },
+            {
+                name: 'str1',
+                label: "Dumb string",
+                type: {type: 'string'},
+            },
+            {
+                name: 'num1',
+                label: "A number",
+                type: {type: 'number'},
             },
             {
                 name: 'check',
@@ -107,32 +118,33 @@ const TestSchema: FormSchema = {
                 label: "A One-of",
                 type: {
                     type: 'oneof',
-                    choices: [{
-                        name: 'text',
-                        label: 'Text',
-                        objectDef: {
-                            type: 'fields-def',
-                            fields: [
-                                requiredField,
-                                {
-                                    name: 'format',
-                                    label: 'Format',
-                                    type: {type: 'string'}
+                    choices: {
+                        'text':
+                            {
+                                label: 'Text',
+                                order: 1,
+                                objectDef: {
+                                    type: 'fields-def',
+                                    fields: [
+                                        requiredField,
+                                        {
+                                            name: 'format',
+                                            label: 'Format',
+                                            type: {type: 'string'}
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
-                    }, {
-                        name: 'date',
-                        label: 'Date',
-                        objectDef: {
-                            type: 'fields-def',
-                            fields: [requiredField]
-                        }
-                    }, {
-                        name: 'checkbox',
-                        label: 'Checkbox'
-                    },]
-                }
+                            }, 'date': {
+                            label: 'Date',
+                            objectDef: {
+                                type: 'fields-def',
+                                fields: [requiredField]
+                            }
+                        }, 'checkbox': {
+                            label: 'Checkbox'
+                        },
+                    }
+                },
             },
             {
                 name: 'coll1',
@@ -173,26 +185,28 @@ const TestSchema: FormSchema = {
                 }
             },
         ]
-    }, {
-        label: "Page 2",
-        fields: [
-            {
-                name: 'text2',
-                label: "Another text field",
-                type: {type: 'text'},
-            },
-            {
-                name: 'richtext2',
-                label: "Another rich text editor",
-                type: {type: 'richtext'},
-            },
-            {
-                name: 'date2',
-                label: "Another date field",
-                type: {type: 'date'},
-            },
-        ]
     },
+        {
+            label: "Page 2",
+            fields: [
+                {
+                    name: 'text2',
+                    label: "Another text field",
+                    type: {type: 'text'},
+                },
+                {
+                    name: 'richtext2',
+                    label: "Another rich text editor",
+                    type: {type: 'richtext'},
+                },
+                {
+                    name: 'date2',
+                    label: "Another date field",
+                    type: {type: 'date'},
+                },
+            ]
+        }
+        ,
     ]
 }
 
@@ -227,7 +241,12 @@ export const Collab = {
                     />
                 </Stack>
                 <Button variant="primary"
-                        onPress={() => console.log(map.toJSON())}
+                        onPress={() => {
+                            const json = map.toJSON()
+                            const json2 = map.toJSON()
+                            jsonifyYMapJSON(TestSchema, json2)
+                            console.log(json, json2)
+                        }}
                 ><Text>Dump JSON</Text></Button>
             </Stack>
         </SpectrumProvider>

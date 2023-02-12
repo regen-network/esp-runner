@@ -20,42 +20,40 @@ export const FieldTypeFields: Field[] = [{
     type: {
         type: 'oneof',
         required: true,
-        choices: [{
-            name: 'text',
-            label: 'Text',
-            objectDef: {
-                type: 'fields-def',
-                fields: [requiredField]
-            }
-        }, {
-            name: 'date',
-            label: 'Date',
-            objectDef: {
-                type: 'fields-def',
-                fields: [requiredField]
-            }
-        }, {
-            name: 'checkbox',
-            label: 'Checkbox'
-        }, {
-            name: 'ordered-collection',
-            label: 'Ordered Collection',
-            objectDef: {
-                type: 'fields-def',
-                fields:
-                    [{
-                        name: 'fields',
-                        label: 'Fields',
-                        type: {
-                            type: 'object',
-                            objectDef: {
-                                type: 'object-ref',
-                                ref: 'Field',
+        choices: {
+            'text': {
+                label: 'Text',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [requiredField]
+                }
+            }, 'date': {
+                label: 'Date',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [requiredField]
+                }
+            }, 'checkbox': {
+                label: 'Checkbox'
+            }, 'ordered-collection': {
+                label: 'Ordered Collection',
+                objectDef: {
+                    type: 'fields-def',
+                    fields:
+                        [{
+                            name: 'fields',
+                            label: 'Fields',
+                            type: {
+                                type: 'object',
+                                objectDef: {
+                                    type: 'object-ref',
+                                    ref: 'Field',
+                                }
                             }
-                        }
-                    }]
+                        }]
+                }
             }
-        }]
+        }
     }
 }]
 

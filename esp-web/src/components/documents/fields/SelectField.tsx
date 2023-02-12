@@ -1,5 +1,4 @@
 import {Item, Picker} from "@adobe/react-spectrum";
-import * as Y from "yjs";
 import {SelectValue} from "../../../model/FormSchema";
 
 export interface SelectFieldProps {
@@ -10,7 +9,7 @@ export interface SelectFieldProps {
 }
 
 export const SelectField = ({label, value, onChange, selectValues}: SelectFieldProps): JSX.Element =>
-    <Picker label={label} selectedKey={value}
+    <Picker label={label} selectedKey={value || null} //null makes this a controlled component
             onSelectionChange={selected => onChange(selected as string)}>
         {selectValues.map(selectValue =>
             <Item key={selectValue.value}>{selectValue.label}</Item>

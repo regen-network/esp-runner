@@ -1,6 +1,6 @@
 export interface FormSchema {
     pages: Page[]
-    objectTypes?: {[id:string]:NamedObjectType}
+    objectTypes?: { [id: string]: NamedObjectType }
 }
 
 export interface NamedObjectType {
@@ -45,13 +45,13 @@ export interface ObjectType {
 
 export interface OneOfType extends OneType {
     type: 'oneof'
-    choices: OneOfChoiceType[]
+    choices: { [name: string]: OneOfChoiceType }
 }
 
 export interface OneOfChoiceType {
-    name: string
     label: string
     objectDef?: ObjectDef
+    order?: number
 }
 
 export interface Field {

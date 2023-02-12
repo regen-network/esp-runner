@@ -2,10 +2,10 @@ import * as Y from 'yjs';
 import {useYJSON, useYMapValue} from "../../yutil";
 import {getTextFieldText, TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
-import {Field, FormSchema, OneOfChoiceType, OneOfType, Type} from "../../model/FormSchema";
+import {Field, FormSchema, OneOfType, Type} from "../../model/FormSchema";
 import {initYMap, initYMapFields} from "../../model/initYMap";
-import {Box, Step, StepButton, Stepper} from "@mui/material";
-import React, {Key, useState} from "react";
+import {Step, StepButton, Stepper} from "@mui/material";
+import React, {Key, useContext, useState} from "react";
 import {RichTextField} from "./fields/RichTextField";
 import {CheckBoxField} from "./fields/CheckboxField";
 import {MultiSelectField} from "./fields/MultiSelectField";
@@ -14,7 +14,7 @@ import {
     ActionGroup, Button, ButtonGroup,
     Cell, Column, Content, Dialog, DialogContainer, Divider, Flex,
     Form, Heading, Item, Row, TableBody, TableHeader, TableView, View,
-    TextField as SpectrumTextField, Picker, useProvider
+    TextField as SpectrumTextField, Picker, NumberField
 } from "@adobe/react-spectrum";
 import {resolveFields, SchemaContext} from '../../model/SchemaContext';
 
@@ -43,9 +43,11 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
             </Stepper>
             <Form>
                 <View>
-                    {schema.pages[activeStep].fields.map((field) =>
-                        <FormField key={field.name} field={field} ymap={ymap}/>
-                    )}
+                    <Flex direction="column">
+                        {schema.pages[activeStep].fields.map((field) =>
+                            <FormField key={field.name} field={field} ymap={ymap}/>
+                        )}
+                    </Flex>
                 </View>
             </Form>
         </View>
@@ -55,6 +57,7 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
 }
 
 const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Element => {
+    const formSchema = useContext(SchemaContext)
     const [value, setValue] = useYMapValue(ymap, field.name)
     const type = field.type
     switch (type.type) {
@@ -62,6 +65,8 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
             return <SpectrumTextField label={field.label} value={value} onChange={setValue}/>
         case 'text':
             return <TextField label={field.label} fragment={value}/>
+        case 'number':
+            return <NumberField label={field.label} value={value} onChange={setValue}/>
         case 'richtext':
             return <RichTextField label={field.label} fragment={value}/>
         case 'date':
@@ -73,17 +78,17 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         case 'select':
             return <SelectField label={field.label} value={value} onChange={setValue} selectValues={type.values}/>
         case 'object':
-            return <ObjectField label={field.label} fields={resolveFields(type.objectDef)} ymap={value}/>
+            return <ObjectField label={field.label} fields={resolveFields(formSchema, type.objectDef)} ymap={value}/>
         case 'ordered-collection':
-            return <OrderedCollectionField label={field.label} fields={resolveFields(type.objectDef)} yarray={value}/>
+            return <OrderedCollectionField label={field.label} fields={resolveFields(formSchema, type.objectDef)}
+                                           yarray={value}/>
         case 'keyed-collection' :
-            return <KeyedCollectionField label={field.label} fields={resolveFields(type.objectDef)} ymap={value}
+            return <KeyedCollectionField label={field.label} fields={resolveFields(formSchema, type.objectDef)}
+                                         ymap={value}
                                          idFieldLabel={type.keyLabel}
             />
         case 'oneof': {
-            const choiceMap: { [type: string]: OneOfChoiceType } = {}
-            type.choices.forEach(choice => choiceMap[choice.name] = choice)
-            return <OneOfField label={field.label} type={type} ymap={value} choiceMap={choiceMap}/>
+            return <OneOfField label={field.label} type={type} ymap={value}/>
         }
         default:
             throw 'TODO'
@@ -184,6 +189,7 @@ const CollectionField = ({fields, yany, label, getItem, addItem, deleteItems, ma
     deleteItems: (items: Set<Key> | 'all') => void,
     map: (json: any, f: (elem: any, key: Key) => any) => any[]
 }): JSX.Element => {
+    const formSchema = useContext(SchemaContext)
     const json: any = useYJSON(yany)
     const [activeItem, setActiveItem] = useState(new Y.Map())
     const [dialogState, setDialogState] = useState<string | null>()
@@ -219,7 +225,7 @@ const CollectionField = ({fields, yany, label, getItem, addItem, deleteItems, ma
                 switch (action) {
                     case 'add':
                         const x = new Y.Map()
-                        initYMapFields(fields, x)
+                        initYMapFields(formSchema, fields, x)
                         setDialogState('edit')
                         addItem(x)
                         setActiveItem(x)
@@ -282,32 +288,60 @@ function valueToString(type: Type, value: any): any {
 const OneOfField = ({
                         label,
                         type,
-                        choiceMap,
                         ymap
-                    }: { label: string, type: OneOfType, choiceMap: { [type: string]: OneOfChoiceType }, ymap: Y.Map<any> }): JSX.Element => {
+                    }: { label: string, type: OneOfType, ymap: Y.Map<any> }): JSX.Element => {
+    const formSchema = useContext(SchemaContext)
     const [typeValue, setTypeValue] = useYMapValue(ymap, 'type')
-    const choice = choiceMap[typeValue]
+    const choices = type.choices;
+    const choice = choices[typeValue]
     let fields: Field[] = []
     if (choice && choice.objectDef) {
-        fields = resolveFields(choice.objectDef)
+        fields = resolveFields(formSchema, choice.objectDef)
     }
+    const choicesOrdered = Object.keys(choices).sort((x, y) => {
+            // sort by order first and label second
+            const cx = choices[x]
+            const cxOrd = cx.order
+            const cy = choices[y]
+            const cyOrd = cy.order
+            if (cxOrd !== undefined) {
+                if (cyOrd !== undefined) {
+                    if(cxOrd < cyOrd) {
+                        return -1
+                    } else if (cxOrd == cyOrd) {
+                        return cx.label.localeCompare(cy.label)
+                    } else {
+                        return 1
+                    }
+                } else {
+                    // order trumps no order
+                    return 1
+                }
+            } else if (cy.order !== undefined) {
+                return -1
+            } else {
+                return cx.label.localeCompare(cy.label)
+            }
+        }
+    )
+    console.log('choices ordered', choicesOrdered)
     return <View
         borderWidth="thin"
         borderColor="dark"
         borderRadius="medium"
         padding="size-50">
-        <Picker label={label} selectedKey={typeValue}
+        <Picker label={label} selectedKey={typeValue || null} // ||null makes this a controlled component
                 onSelectionChange={sel => {
                     ymap.clear()
-                    const choice = choiceMap[sel]
-                    setTypeValue(choice.name)
+                    const choice = choices[sel]
+                    setTypeValue(sel)
                     if (choice.objectDef) {
-                        initYMapFields(resolveFields(choice.objectDef), ymap)
+                        initYMapFields(formSchema, resolveFields(formSchema, choice.objectDef), ymap)
                     }
                 }}
         >
-            {type.choices.map(choice =>
-                <Item key={choice.name}>{choice.label}</Item>
+            {choicesOrdered.map(choice =>
+                <Item key={choice}>{choices[choice].label}</Item>
             )}
         </Picker>
         <React.Fragment>
