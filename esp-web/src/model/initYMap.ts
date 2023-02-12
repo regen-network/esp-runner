@@ -3,11 +3,11 @@ import * as Y from "yjs";
 import {resolveFields} from "./SchemaContext";
 
 export function initYMap(schema: FormSchema|null, ymap: Y.Map<any>) {
-    schema && schema.pages.forEach(page => initYMapFields(schema, page.fields, ymap))
+    schema && schema.pages && schema.pages.forEach(page => initYMapFields(schema, page.fields, ymap))
 }
 
 export function initYMapFields(schema: FormSchema|null, fields: Field[], ymap: Y.Map<any>) {
-    fields.forEach(field => {
+    fields && fields.forEach(field => {
         const key = field.name
         if (!ymap.has(key)) {
             const type = field.type

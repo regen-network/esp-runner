@@ -10,35 +10,37 @@ export function jsonifyYMapJSONFields(schema: FormSchema, fields: Field[], json:
     fields.forEach(field => {
         const key = field.name
         const type = field.type
-        switch (type.type) {
-            case 'text':
-                json[key] = getTextFieldText(json[key])
-                break
-            case 'multiselect':
-                json[key] = Object.keys(json[key])
-                break
-            case 'object':
-                jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), json[key])
-                break
-            case 'keyed-collection': {
-                const coll = json[key]
-                Object.keys(coll).forEach(id =>
-                    jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), coll[id])
-                )
-                break
-            }
-            case 'ordered-collection': {
-                const coll: Array<any> = json[key]
-                coll.forEach(x =>
-                    jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), x)
-                )
-                break
-            }
-            case 'oneof': {
-                const val = json[key]
-                const choice = type.choices[val.type]
-                jsonifyYMapJSONFields(schema, resolveFields(schema, choice.objectDef), json[key])
-                break
+        const value = json[key]
+        if (value !== undefined) {
+            switch (type.type) {
+                case 'text':
+                    json[key] = getTextFieldText(value)
+                    break
+                case 'multiselect':
+                    json[key] = Object.keys(value)
+                    break
+                case 'object':
+                    jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), value)
+                    break
+                case 'keyed-collection': {
+                    Object.keys(value).forEach(id =>
+                        jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), value[id])
+                    )
+                    break
+                }
+                case 'ordered-collection': {
+                    value.forEach((x: any) =>
+                        jsonifyYMapJSONFields(schema, resolveFields(schema, type.objectDef), x)
+                    )
+                    break
+                }
+                case 'oneof': {
+                    if (value.type) {
+                        const choice = type.choices[value.type]
+                        jsonifyYMapJSONFields(schema, resolveFields(schema, choice.objectDef), value)
+                    }
+                    break
+                }
             }
         }
     })

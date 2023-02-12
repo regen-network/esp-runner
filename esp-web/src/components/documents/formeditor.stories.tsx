@@ -1,5 +1,5 @@
 import type {Meta} from '@storybook/react';
-import {Button, Text, defaultTheme, Provider as SpectrumProvider} from '@adobe/react-spectrum';
+import {Button, Text} from '@adobe/react-spectrum';
 import {FormEditor} from "./FormEditor";
 import * as Y from "yjs";
 import {Stack} from "@mui/material";
@@ -191,9 +191,9 @@ const TestSchema: FormSchema = {
             {
                 name: 'aref',
                 label: "A reference to the collection above",
-                type:{
-                    type:'ref',
-                    refPath:'coll2'
+                type: {
+                    type: 'ref',
+                    refPath: 'coll2'
                 }
             }
         ]
@@ -226,11 +226,9 @@ export const Primary = {
     name: 'Primary',
     render: () => {
         const doc = new Y.Doc()
-        return <SpectrumProvider theme={defaultTheme}>
-            <FormEditor
-                schema={TestSchema}
-                ymap={doc.getMap()}
-            /></SpectrumProvider>
+        return <FormEditor
+            schema={TestSchema}
+            ymap={doc.getMap()}/>
     },
 };
 
@@ -240,28 +238,26 @@ export const Collab = {
         const doc = new Y.Doc()
         const map = doc.getMap('x')
         initYMap(TestSchema, map)
-        return <SpectrumProvider theme={defaultTheme}>
-            <Stack>
-                <Stack direction="row">
-                    <FormEditor
-                        schema={TestSchema}
-                        ymap={map}
-                    />
-                    <FormEditor
-                        schema={TestSchema}
-                        ymap={map}
-                    />
-                </Stack>
-                <Button variant="primary"
-                        onPress={() => {
-                            const json = map.toJSON()
-                            const json2 = map.toJSON()
-                            jsonifyYMapJSON(TestSchema, json2)
-                            console.log(json, json2)
-                        }}
-                ><Text>Dump JSON</Text></Button>
+        return <Stack>
+            <Stack direction="row">
+                <FormEditor
+                    schema={TestSchema}
+                    ymap={map}
+                />
+                <FormEditor
+                    schema={TestSchema}
+                    ymap={map}
+                />
             </Stack>
-        </SpectrumProvider>
+            <Button variant="primary"
+                    onPress={() => {
+                        const json = map.toJSON()
+                        const json2 = map.toJSON()
+                        jsonifyYMapJSON(TestSchema, json2)
+                        console.log(json, json2)
+                    }}
+            ><Text>Dump JSON</Text></Button>
+        </Stack>
     },
 };
 
@@ -269,10 +265,9 @@ export const Form = {
     name: 'Form',
     render: () => {
         const doc = new Y.Doc()
-        return <SpectrumProvider theme={defaultTheme}>
-            <FormEditor
-                schema={FormSchemaSchema}
-                ymap={doc.getMap()}
-            /></SpectrumProvider>
+        return <FormEditor
+            schema={FormSchemaSchema}
+            ymap={doc.getMap()}
+        />
     },
 };

@@ -2,9 +2,14 @@ import {Field, FormSchema} from "./FormSchema";
 import * as Y from "yjs";
 
 export function jsonToYMap(schema: FormSchema, ymap: Y.Map<any>, json: any) {
-    schema.pages.forEach(page =>
-        setFields(page.fields, ymap, json)
-    )
+    if (schema.pages) {
+        schema.pages.forEach(page => {
+                if (page.fields) {
+                    setFields(page.fields, ymap, json)
+                }
+            }
+        )
+    }
 }
 
 function setFields(fields: Field[], ymap: Y.Map<any>, initContent: any) {

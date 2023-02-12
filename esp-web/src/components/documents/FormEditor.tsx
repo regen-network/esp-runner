@@ -29,13 +29,15 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     initYMap(schema, ymap)
     return <SchemaContext.Provider value={schema}>
         <DocContext.Provider value={ymap}>
-            <FormEditorInner schema={schema} ymap={ymap} />
+            <FormEditorInner schema={schema} ymap={ymap}/>
         </DocContext.Provider>
     </SchemaContext.Provider>
 }
 
 const FormEditorInner = ({schema, ymap}: EditorProps): JSX.Element => {
-    if (schema.pages.length == 1) {
+    if (!schema.pages || schema.pages.length == 0) {
+        return <div></div>
+    } else if (schema.pages.length == 1) {
         const page = schema.pages[0]
         return <View>
             {page.fields.map((field) =>
@@ -44,7 +46,7 @@ const FormEditorInner = ({schema, ymap}: EditorProps): JSX.Element => {
         </View>
     } else {
         const [activeStep, setActiveStep] = React.useState(0);
-        return <SchemaContext.Provider value={schema}><View>
+        return <View>
             <Stepper nonLinear activeStep={activeStep}>
                 {schema.pages.map((page, index) => <Step key={index}>
                     <StepButton onClick={() => setActiveStep(index)}>{page.label}</StepButton>
@@ -60,7 +62,6 @@ const FormEditorInner = ({schema, ymap}: EditorProps): JSX.Element => {
                 </View>
             </Form>
         </View>
-        </SchemaContext.Provider>
     }
 }
 
@@ -68,6 +69,10 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
     const formSchema = useContext(SchemaContext)
     const [value, setValue] = useYMapValue(ymap, field.name)
     const type = field.type
+    if(!type) {
+        return <div></div>
+    }
+
     switch (type.type) {
         case 'string':
             return <SpectrumTextField label={field.label} value={value} onChange={setValue}/>
@@ -101,7 +106,8 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         case 'ref':
             return <RefField label={field.label} value={value} onChange={setValue} refPath={type.refPath}/>
         default:
-            throw 'TODO'
+            console.log('invalid field', field)
+            return <div></div>
     }
 }
 
