@@ -1,5 +1,6 @@
 import {Checkbox} from '@adobe/react-spectrum'
-import React from "react";
+import React, {useId} from "react";
+import {FieldLabel} from "./FieldLabel";
 
 export interface CheckboxFieldProps {
     label: string
@@ -7,10 +8,13 @@ export interface CheckboxFieldProps {
     onChange: (value: boolean) => void
 }
 
-// noinspection PointlessBooleanExpressionJS
-export const CheckBoxField = ({label, value, onChange}: CheckboxFieldProps): JSX.Element =>
-    <p>
-        <Checkbox onChange={e => onChange(e)} isSelected={!!value}> {/*// !!value is required to make this consistently a component */}
-            {label}
-        </Checkbox>
-    </p>
+export const CheckBoxField = ({label, value, onChange}: CheckboxFieldProps): JSX.Element => {
+    const id = useId()
+    // noinspection PointlessBooleanExpressionJS
+    return <Checkbox onChange={e => onChange(e)}
+                     aria-labelledby={id}
+                     isSelected={!!value} // !!value is required to make this consistently a component */}
+    >
+        <FieldLabel id={id} label={label}/>
+    </Checkbox>
+}

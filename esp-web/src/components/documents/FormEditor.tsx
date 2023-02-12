@@ -17,6 +17,8 @@ import {
     TextField as SpectrumTextField, Picker, NumberField
 } from "@adobe/react-spectrum";
 import {resolveFields, SchemaContext} from '../../model/SchemaContext';
+import {RefField} from "./fields/RefField";
+import {DocContext} from "./DocContext";
 
 export interface EditorProps {
     schema: FormSchema
@@ -25,14 +27,21 @@ export interface EditorProps {
 
 export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     initYMap(schema, ymap)
+    return <SchemaContext.Provider value={schema}>
+        <DocContext.Provider value={ymap}>
+            <FormEditorInner schema={schema} ymap={ymap} />
+        </DocContext.Provider>
+    </SchemaContext.Provider>
+}
+
+const FormEditorInner = ({schema, ymap}: EditorProps): JSX.Element => {
     if (schema.pages.length == 1) {
         const page = schema.pages[0]
-        return <SchemaContext.Provider value={schema}>
-            <View>
-                {page.fields.map((field) =>
-                    <FormField key={field.name} field={field} ymap={ymap}/>
-                )}
-            </View></SchemaContext.Provider>
+        return <View>
+            {page.fields.map((field) =>
+                <FormField key={field.name} field={field} ymap={ymap}/>
+            )}
+        </View>
     } else {
         const [activeStep, setActiveStep] = React.useState(0);
         return <SchemaContext.Provider value={schema}><View>
@@ -53,7 +62,6 @@ export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
         </View>
         </SchemaContext.Provider>
     }
-
 }
 
 const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Element => {
@@ -90,6 +98,8 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         case 'oneof': {
             return <OneOfField label={field.label} type={type} ymap={value}/>
         }
+        case 'ref':
+            return <RefField label={field.label} value={value} onChange={setValue} refPath={type.refPath}/>
         default:
             throw 'TODO'
     }
@@ -300,31 +310,31 @@ const OneOfField = ({
     }
     const choicesOrdered = Object.keys(choices).sort((x, y) => {
             // sort by order first and label second
+            // note that we're checking for ascending order
             const cx = choices[x]
             const cxOrd = cx.order
             const cy = choices[y]
             const cyOrd = cy.order
             if (cxOrd !== undefined) {
                 if (cyOrd !== undefined) {
-                    if(cxOrd < cyOrd) {
-                        return -1
+                    if (cxOrd > cyOrd) {
+                        return 1
                     } else if (cxOrd == cyOrd) {
                         return cx.label.localeCompare(cy.label)
                     } else {
-                        return 1
+                        return -1
                     }
                 } else {
                     // order trumps no order
-                    return 1
+                    return -1
                 }
             } else if (cy.order !== undefined) {
-                return -1
+                return 1
             } else {
                 return cx.label.localeCompare(cy.label)
             }
         }
     )
-    console.log('choices ordered', choicesOrdered)
     return <View
         borderWidth="thin"
         borderColor="dark"

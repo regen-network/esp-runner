@@ -1,14 +1,18 @@
 import * as Y from 'yjs';
-import {useState, useSyncExternalStore} from "react";
+import {useSyncExternalStore} from "react";
 
 export function useYMapKeys(map: Y.Map<any>): IterableIterator<string> {
-    const [state, setState] = useState(map.keys())
-    map.observe((evt: Y.YMapEvent<any>) => {
-        if (evt.changes.added.size > 0 || evt.changes.deleted.size > 0) {
-            setState(map.keys())
+    let keys = map.keys()
+    return useSyncExternalStore(function (listener) {
+        const onChange = () => {
+            keys = map.keys()
+            listener()
         }
+        map.observe(onChange)
+        return () => map.observe(onChange)
+    }, function () {
+        return keys
     })
-    return state
 }
 
 export function useYMapValue(map: Y.Map<any>, key: string): [any, ((value: any) => void)] {

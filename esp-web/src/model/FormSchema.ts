@@ -117,7 +117,7 @@ export interface StringType {
 
 export interface RefType {
     type: 'ref'
-    refType: string
+    refPath: string
 }
 
 export type ObjectDef = FieldsDefinition | ObjectRef

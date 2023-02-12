@@ -136,6 +136,7 @@ const TestSchema: FormSchema = {
                                 }
                             }, 'date': {
                             label: 'Date',
+                            order: 2,
                             objectDef: {
                                 type: 'fields-def',
                                 fields: [requiredField]
@@ -143,6 +144,9 @@ const TestSchema: FormSchema = {
                         }, 'checkbox': {
                             label: 'Checkbox'
                         },
+                        'richtext': {
+                            label: 'Rich Text'
+                        }
                     }
                 },
             },
@@ -184,6 +188,14 @@ const TestSchema: FormSchema = {
                     }
                 }
             },
+            {
+                name: 'aref',
+                label: "A reference to the collection above",
+                type:{
+                    type:'ref',
+                    refPath:'coll2'
+                }
+            }
         ]
     },
         {
