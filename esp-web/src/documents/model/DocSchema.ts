@@ -38,7 +38,7 @@ export type Type =
     | RefType
 
 
-export interface ObjectType {
+export interface ObjectType extends OneType {
     type: 'object'
     objectDef: ObjectDef
 }
@@ -57,6 +57,8 @@ export interface OneOfChoiceType {
 export interface Field {
     name: string
     label: string
+    description?: string,
+    tooltip?: string,
     type: Type
 }
 
@@ -65,8 +67,9 @@ export interface SelectType extends OneType {
     values: SelectValue[]
 }
 
-export interface SelectValue {
+export interface SelectValue extends OneType {
     label: string
+    description?: string
     value: string
 }
 
@@ -107,15 +110,15 @@ export interface CheckboxType {
     type: 'checkbox'
 }
 
-export interface RichTextType {
+export interface RichTextType extends OneType {
     type: 'richtext'
 }
 
-export interface StringType {
+export interface StringType extends OneType {
     type: 'string'
 }
 
-export interface RefType {
+export interface RefType extends OneType {
     type: 'ref'
     refPath: string
 }

@@ -6,7 +6,22 @@ const requiredField: Field = {
     type: {type: 'checkbox'}
 }
 
-export const FieldTypeFields: Field[] = [{
+const SelectValueFields: Field[] = [{
+    name: 'label',
+    label: 'Label',
+    type: {type: 'text', required: true}
+}, {
+    name: 'value',
+    label: 'Value / IRI',
+    type: {type: 'string', required: true}
+}, {
+    name: 'description',
+    label: 'Description',
+    type: {type: 'text', required: false}
+}
+]
+
+const FieldTypeFields: Field[] = [{
     name: 'label',
     label: 'Label',
     type: {type: 'text', required: true},
@@ -23,19 +38,52 @@ export const FieldTypeFields: Field[] = [{
         choices: {
             'text': {
                 label: 'Text',
+                order: 1,
                 objectDef: {
                     type: 'fields-def',
                     fields: [requiredField]
                 }
-            }, 'date': {
+            }, 'richtext': {
+                label: 'Rich Text',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [requiredField]
+                }
+            }, 'string': {
+                label: "String",
+            },
+            'number': {
+                label: 'Number',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [requiredField]
+                }
+            },
+            'date': {
                 label: 'Date',
                 objectDef: {
                     type: 'fields-def',
                     fields: [requiredField]
                 }
-            }, 'checkbox': {
+            },
+            'checkbox': {
                 label: 'Checkbox'
-            }, 'ordered-collection': {
+            },
+            'select': {
+                label: 'Select',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: SelectValueFields
+                }
+            },
+            'multiselect': {
+                label: 'Multi-Select',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: SelectValueFields
+                }
+            },
+            'ordered-collection': {
                 label: 'Ordered Collection',
                 objectDef: {
                     type: 'fields-def',
@@ -55,6 +103,14 @@ export const FieldTypeFields: Field[] = [{
             },
         }
     }
+},{
+    name:'description',
+    label:'Description',
+    type: {type: 'text', required: false}
+},{
+    name:'tooltip',
+    label:'Tooltip',
+    type: {type: 'text', required: false}
 }]
 
 // export const ObjectTypeFields: Field[] = [{
