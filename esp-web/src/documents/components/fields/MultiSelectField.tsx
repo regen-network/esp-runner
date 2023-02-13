@@ -1,7 +1,7 @@
 import {Checkbox, useProvider} from '@adobe/react-spectrum'
 import React, {useId} from "react";
 import * as Y from 'yjs';
-import {SelectValue} from "../../../model/FormSchema";
+import {SelectValue} from "../../model/DocSchema";
 import {useYMapValue} from "../../../yutil";
 import {spectrumClassName} from "../../../spectrumUtil";
 import {FieldLabel} from "./FieldLabel";

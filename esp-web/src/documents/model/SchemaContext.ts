@@ -1,9 +1,9 @@
 import {createContext} from "react";
-import {Field, FormSchema, ObjectDef} from "./FormSchema";
+import {Field, DocSchema, ObjectDef} from "./DocSchema";
 
-export const SchemaContext = createContext<FormSchema | null>(null);
+export const SchemaContext = createContext<DocSchema | null>(null);
 
-export function resolveFields(schema: FormSchema|null, objectDef?: ObjectDef): Field[] {
+export function resolveFields(schema: DocSchema|null, objectDef?: ObjectDef): Field[] {
     if (!objectDef) {
         return []
     }

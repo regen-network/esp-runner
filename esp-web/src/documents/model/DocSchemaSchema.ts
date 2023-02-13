@@ -1,4 +1,4 @@
-import {Field, FormSchema} from "./FormSchema";
+import {Field, DocSchema} from "./DocSchema";
 
 const requiredField: Field = {
     name: 'required',
@@ -7,12 +7,12 @@ const requiredField: Field = {
 }
 
 export const FieldTypeFields: Field[] = [{
-    name: 'name',
-    label: 'Name',
-    type: {type: 'text', required: true},
-}, {
     name: 'label',
     label: 'Label',
+    type: {type: 'text', required: true},
+}, {
+    name: 'name',
+    label: 'Name / IRI',
     type: {type: 'text', required: true},
 }, {
     name: 'type',
@@ -62,7 +62,7 @@ export const FieldTypeFields: Field[] = [{
 //     label: "Fields",
 // }]
 //
-export const FormSchemaSchema: FormSchema = {
+export const DocSchemaSchema: DocSchema = {
     pages: [{
         label: 'Form',
         fields: [{

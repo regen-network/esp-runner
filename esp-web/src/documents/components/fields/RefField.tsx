@@ -1,6 +1,6 @@
 import {Item, Picker} from "@adobe/react-spectrum";
 import {useContext} from "react";
-import {DocContext} from "../DocContext";
+import {DocContext} from "../../model/DocContext";
 import {useYMapKeys, useYMapValue} from "../../../yutil";
 
 export interface RefFieldProps {

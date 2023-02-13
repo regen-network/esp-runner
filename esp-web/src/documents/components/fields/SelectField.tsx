@@ -1,5 +1,5 @@
 import {Item, Picker} from "@adobe/react-spectrum";
-import {SelectValue} from "../../../model/FormSchema";
+import {SelectValue} from "../../model/DocSchema";
 
 export interface SelectFieldProps {
     label: string

@@ -1,12 +1,12 @@
-import {Field, FormSchema} from "./FormSchema";
+import {Field, DocSchema} from "./DocSchema";
 import * as Y from "yjs";
 import {resolveFields} from "./SchemaContext";
 
-export function initYMap(schema: FormSchema|null, ymap: Y.Map<any>) {
+export function initYMap(schema: DocSchema|null, ymap: Y.Map<any>) {
     schema && schema.pages && schema.pages.forEach(page => initYMapFields(schema, page.fields, ymap))
 }
 
-export function initYMapFields(schema: FormSchema|null, fields: Field[], ymap: Y.Map<any>) {
+export function initYMapFields(schema: DocSchema|null, fields: Field[], ymap: Y.Map<any>) {
     fields && fields.forEach(field => {
         const key = field.name
         if (!ymap.has(key)) {

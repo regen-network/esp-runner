@@ -2,8 +2,8 @@ import {EditorContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
 import * as Y from 'yjs';
-import {View} from "@adobe/react-spectrum";
 import {FieldLabel} from "./FieldLabel";
+import {useId} from "react";
 
 export interface RichTextFieldProps {
     label: string,
@@ -20,8 +20,9 @@ export const RichTextField = ({label, fragment}: RichTextFieldProps): JSX.Elemen
             ],
         }
     )
+    const id = useId()
     return <div>
-        <FieldLabel label={label} />
+        <FieldLabel label={label} id={id} />
             <EditorContent editor={editor}/>
     </div>
 }

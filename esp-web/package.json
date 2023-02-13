@@ -13,7 +13,6 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.24.1",
     "@babel/core": ">=7.0.0 <8.0.0",
-    "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@hocuspocus/provider": "^1.0.1",

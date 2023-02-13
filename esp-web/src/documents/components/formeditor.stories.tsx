@@ -1,18 +1,18 @@
 import type {Meta} from '@storybook/react';
 import {Button, Text} from '@adobe/react-spectrum';
-import {FormEditor} from "./FormEditor";
+import {DocEditor} from "./DocEditor";
 import * as Y from "yjs";
 import {Stack} from "@mui/material";
-import {Field, FormSchema} from "../../model/FormSchema";
-import {initYMap} from "../../model/initYMap";
-import {FormSchemaSchema} from "../../model/FormSchemaSchema";
-import {jsonifyYMapJSON} from "../../model/yMapToJson";
+import {Field, DocSchema} from "../model/DocSchema";
+import {initYMap} from "../model/initYMap";
+import {DocSchemaSchema} from "../model/DocSchemaSchema";
+import {jsonifyYMapJSON} from "../model/yMapToJson";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 export default {
     title: 'Documents/FormEditor',
-    component: FormEditor,
-} satisfies Meta<typeof FormEditor>;
+    component: DocEditor,
+} satisfies Meta<typeof DocEditor>;
 
 const requiredField: Field = {
     name: 'required',
@@ -20,7 +20,7 @@ const requiredField: Field = {
     type: {type: 'checkbox'}
 }
 
-const TestSchema: FormSchema = {
+const TestSchema: DocSchema = {
     pages: [{
         label: "Page 1",
         fields: [
@@ -226,7 +226,7 @@ export const Primary = {
     name: 'Primary',
     render: () => {
         const doc = new Y.Doc()
-        return <FormEditor
+        return <DocEditor
             schema={TestSchema}
             ymap={doc.getMap()}/>
     },
@@ -240,11 +240,11 @@ export const Collab = {
         initYMap(TestSchema, map)
         return <Stack>
             <Stack direction="row">
-                <FormEditor
+                <DocEditor
                     schema={TestSchema}
                     ymap={map}
                 />
-                <FormEditor
+                <DocEditor
                     schema={TestSchema}
                     ymap={map}
                 />
@@ -265,8 +265,8 @@ export const Form = {
     name: 'Form',
     render: () => {
         const doc = new Y.Doc()
-        return <FormEditor
-            schema={FormSchemaSchema}
+        return <DocEditor
+            schema={DocSchemaSchema}
             ymap={doc.getMap()}
         />
     },

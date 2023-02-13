@@ -1,17 +1,19 @@
 import type {Meta} from '@storybook/react';
-import {TextField} from "./TextField";
+import {RichTextField} from "./RichTextField";
 import * as Y from 'yjs';
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 export default {
-    title: 'Documents/Fields/TextField',
-    component: TextField,
-} satisfies Meta<typeof TextField>;
+    title: 'Documents/Fields/RichTextField',
+    component: RichTextField,
+    // tags: ['autodocs'],
+    argTypes: { },
+} satisfies Meta<typeof RichTextField>;
 
 export const Primary = {
     name: 'Primary',
     render: () => {
         const doc = new Y.Doc()
-        return <TextField fragment={doc.getXmlFragment('x')}/>
+        return <RichTextField label="Rich Tex" fragment={doc.getXmlFragment('x')}/>
     },
 };

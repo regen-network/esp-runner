@@ -1,4 +1,4 @@
-export interface FormSchema {
+export interface DocSchema {
     pages: Page[]
     objectTypes?: { [id: string]: NamedObjectType }
 }

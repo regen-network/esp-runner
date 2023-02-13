@@ -14,6 +14,6 @@ export const Primary = {
     render: () => {
         const doc = new Y.Doc()
         const [value, setValue] = useYMapValue(doc.getMap('x'), 'date')
-        return <DateField  value={value} onChange={setValue}/>
+        return <DateField label="Date" value={value} onChange={setValue}/>
     },
 };

@@ -1,12 +1,12 @@
-import {Field, FormSchema} from "./FormSchema";
+import {Field, DocSchema} from "./DocSchema";
 import {resolveFields} from "./SchemaContext";
-import {getTextFieldText} from "../components/documents/fields/TextField";
+import {getTextFieldText} from "../components/fields/TextField";
 
-export function jsonifyYMapJSON(schema: FormSchema, json: { [key: string]: any }) {
+export function jsonifyYMapJSON(schema: DocSchema, json: { [key: string]: any }) {
     schema.pages.forEach(page => jsonifyYMapJSONFields(schema, page.fields, json))
 }
 
-export function jsonifyYMapJSONFields(schema: FormSchema, fields: Field[], json: { [key: string]: any }) {
+export function jsonifyYMapJSONFields(schema: DocSchema, fields: Field[], json: { [key: string]: any }) {
     fields.forEach(field => {
         const key = field.name
         const type = field.type

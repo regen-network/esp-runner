@@ -2,8 +2,8 @@ import * as Y from 'yjs';
 import {useYJSON, useYMapValue} from "../../yutil";
 import {getTextFieldText, TextField} from "./fields/TextField";
 import {DateField} from "./fields/DateField";
-import {Field, FormSchema, OneOfType, Type} from "../../model/FormSchema";
-import {initYMap, initYMapFields} from "../../model/initYMap";
+import {Field, DocSchema, OneOfType, Type} from "../model/DocSchema";
+import {initYMap, initYMapFields} from "../model/initYMap";
 import {Step, StepButton, Stepper} from "@mui/material";
 import React, {Key, useContext, useState} from "react";
 import {RichTextField} from "./fields/RichTextField";
@@ -16,16 +16,16 @@ import {
     Form, Heading, Item, Row, TableBody, TableHeader, TableView, View,
     TextField as SpectrumTextField, Picker, NumberField
 } from "@adobe/react-spectrum";
-import {resolveFields, SchemaContext} from '../../model/SchemaContext';
+import {resolveFields, SchemaContext} from '../model/SchemaContext';
 import {RefField} from "./fields/RefField";
-import {DocContext} from "./DocContext";
+import {DocContext} from "../model/DocContext";
 
 export interface EditorProps {
-    schema: FormSchema
+    schema: DocSchema
     ymap: Y.Map<any>
 }
 
-export const FormEditor = ({schema, ymap}: EditorProps): JSX.Element => {
+export const DocEditor = ({schema, ymap}: EditorProps): JSX.Element => {
     initYMap(schema, ymap)
     return <SchemaContext.Provider value={schema}>
         <DocContext.Provider value={ymap}>

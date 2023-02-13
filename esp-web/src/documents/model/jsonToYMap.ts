@@ -1,7 +1,7 @@
-import {Field, FormSchema} from "./FormSchema";
+import {Field, DocSchema} from "./DocSchema";
 import * as Y from "yjs";
 
-export function jsonToYMap(schema: FormSchema, ymap: Y.Map<any>, json: any) {
+export function jsonToYMap(schema: DocSchema, ymap: Y.Map<any>, json: any) {
     if (schema.pages) {
         schema.pages.forEach(page => {
                 if (page.fields) {
