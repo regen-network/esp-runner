@@ -19,6 +19,7 @@ import {
 import {resolveFields, SchemaContext} from '../model/SchemaContext';
 import {RefField} from "./fields/RefField";
 import {DocContext} from "../model/DocContext";
+import {CodeField} from "./fields/CodeField";
 
 export interface EditorProps {
     schema: DocSchema
@@ -105,6 +106,8 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         }
         case 'ref':
             return <RefField label={field.label} value={value} onChange={setValue} refPath={type.refPath}/>
+        case 'code':
+            return <CodeField label={field.label} language={type.language} text={value} />
         default:
             console.log('invalid field', field)
             return <div></div>

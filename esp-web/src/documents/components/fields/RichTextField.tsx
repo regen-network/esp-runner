@@ -22,7 +22,7 @@ export const RichTextField = ({label, fragment}: RichTextFieldProps): JSX.Elemen
     )
     const id = useId()
     return <div>
-        <FieldLabel label={label} id={id} />
-            <EditorContent editor={editor}/>
+        <FieldLabel label={label} id={id}/>
+        <EditorContent editor={editor}/>
     </div>
 }

@@ -35,6 +35,7 @@ export type Type =
     | KeyedCollectionType
     | OneOfType
     | RefType
+    | CodeType
 
 
 export interface ObjectType extends OneType {
@@ -49,6 +50,7 @@ export interface OneOfType extends OneType {
 
 export interface OneOfChoiceType {
     label: string
+    description?: string
     objectDef?: ObjectDef
     order?: number
 }
@@ -66,7 +68,7 @@ export interface SelectType extends OneType {
     values: SelectValue[]
 }
 
-export interface SelectValue extends OneType{
+export interface SelectValue extends OneType {
     label: string
     description?: string
     value: string
@@ -109,15 +111,15 @@ export interface CheckboxType {
     type: 'checkbox'
 }
 
-export interface RichTextType extends OneType{
+export interface RichTextType extends OneType {
     type: 'richtext'
 }
 
-export interface StringType extends OneType{
+export interface StringType extends OneType {
     type: 'string'
 }
 
-export interface RefType extends OneType{
+export interface RefType extends OneType {
     type: 'ref'
     refPath: string
 }
@@ -132,4 +134,9 @@ export interface FieldsDefinition {
 export interface ObjectRef {
     type: 'object-ref'
     ref: string
+}
+
+export interface CodeType extends OneType {
+    type: 'code',
+    language: string
 }

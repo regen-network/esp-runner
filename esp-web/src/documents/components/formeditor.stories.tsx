@@ -195,7 +195,15 @@ const TestSchema: DocSchema = {
                     type: 'ref',
                     refPath: 'coll2'
                 }
-            }
+            },
+            {
+                name: 'code1',
+                label:"SPARQL Query",
+                type:{
+                    type:'code',
+                    language: 'sparql'
+                }
+            },
         ]
     },
         {

@@ -1,0 +1,24 @@
+.ProseMirror{
+    border-width: var(--spectrum-alias-border-size-thin);
+    border-radius: var(--spectrum-alias-border-radius-medium);
+    border-color: var(--spectrum-alias-border-color-dark);
+    border-style: solid;
+}
+
+.ProseMirror-focused {
+    outline: none;
+    border-color: var(--spectrum-alias-border-color-mouse-focus);
+}
+
+.CodeField {
+    border-width: var(--spectrum-alias-border-size-thin);
+    border-radius: var(--spectrum-alias-border-radius-medium);
+    border-color: var(--spectrum-alias-border-color-dark);
+    border-style: solid;
+    padding:0.5em;
+}
+
+.CodeField-focused {
+    outline: none;
+    border-color: var(--spectrum-alias-border-color-mouse-focus);
+}

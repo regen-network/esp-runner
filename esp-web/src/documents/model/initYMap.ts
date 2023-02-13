@@ -33,6 +33,8 @@ export function initYMapFields(schema: DocSchema|null, fields: Field[], ymap: Y.
                 case 'keyed-collection':
                     ymap.set(key, new Y.Map())
                     break
+                case 'code':
+                    ymap.set(key, new Y.Text())
             }
         }
     })

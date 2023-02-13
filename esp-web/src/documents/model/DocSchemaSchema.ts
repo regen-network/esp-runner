@@ -17,12 +17,12 @@ const SelectValueFields: Field[] = [{
 }, {
     name: 'description',
     label: 'Description',
-    type: {type: 'text', required: false}
+    type: {type: 'richtext', required: false}
 }]
 
 const ObjectDefField: Field = {
     name: 'objectDef',
-    label: 'Definition',
+    label: 'Fields',
     type: {
         type: 'oneof',
         choices:
@@ -172,7 +172,12 @@ const FieldFields: Field[] = [{
                                     label: "Order",
                                     name: 'order',
                                     type: {type: 'number'}
-                                }, ObjectDefField]
+                                },{
+                                    label:"Description",
+                                    name:'description',
+                                    type:{type:'richtext'}
+                                }
+                                , ObjectDefField]
                             }
                         }
                     }]
@@ -188,17 +193,20 @@ const FieldFields: Field[] = [{
                         type: {type: 'string'}
                     }]
                 }
+            },
+            'code':{
+                label: "Code",
             }
         }
     }
 }, {
     name: 'description',
     label: 'Description',
-    type: {type: 'text', required: false}
+    type: {type: 'richtext', required: false}
 }, {
     name: 'tooltip',
     label: 'Tooltip',
-    type: {type: 'text', required: false}
+    type: {type: 'richtext', required: false}
 }]
 
 const FieldsField: Field = {
