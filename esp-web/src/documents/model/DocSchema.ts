@@ -4,7 +4,6 @@ export interface DocSchema {
 }
 
 export interface NamedObjectType {
-    id: string
     fields: Field[]
 }
 
@@ -67,7 +66,7 @@ export interface SelectType extends OneType {
     values: SelectValue[]
 }
 
-export interface SelectValue extends OneType {
+export interface SelectValue extends OneType{
     label: string
     description?: string
     value: string
@@ -110,15 +109,15 @@ export interface CheckboxType {
     type: 'checkbox'
 }
 
-export interface RichTextType extends OneType {
+export interface RichTextType extends OneType{
     type: 'richtext'
 }
 
-export interface StringType extends OneType {
+export interface StringType extends OneType{
     type: 'string'
 }
 
-export interface RefType extends OneType {
+export interface RefType extends OneType{
     type: 'ref'
     refPath: string
 }

@@ -18,10 +18,48 @@ const SelectValueFields: Field[] = [{
     name: 'description',
     label: 'Description',
     type: {type: 'text', required: false}
-}
-]
+}]
 
-const FieldTypeFields: Field[] = [{
+const ObjectDefField: Field = {
+    name: 'objectDef',
+    label: 'Definition',
+    type: {
+        type: 'oneof',
+        choices:
+            {
+                'fields-def': {
+                    label: "Fields Definition",
+                    objectDef: {
+                        type: 'fields-def',
+                        fields: [{
+                            name: 'fields',
+                            label: "Fields",
+                            type: {
+                                type: 'ordered-collection',
+                                objectDef: {
+                                    type: 'object-ref',
+                                    ref: 'Field',
+                                }
+                            }
+                        }]
+                    }
+                },
+                'object-ref': {
+                    label: "Object Reference",
+                    objectDef: {
+                        type: 'fields-def',
+                        fields: [{
+                            name: 'ref',
+                            label: "Object",
+                            type: {type: 'ref', required: true, refPath: 'objectTypes'}
+                        }]
+                    }
+                }
+            }
+    }
+}
+
+const FieldFields: Field[] = [{
     name: 'label',
     label: 'Label',
     type: {type: 'text', required: true},
@@ -83,41 +121,98 @@ const FieldTypeFields: Field[] = [{
                     fields: SelectValueFields
                 }
             },
+            'object':{
+                label: 'Object',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [
+                        ObjectDefField,
+                    ]
+                },
+            },
             'ordered-collection': {
                 label: 'Ordered Collection',
                 objectDef: {
                     type: 'fields-def',
-                    fields:
-                        [{
-                            name: 'fields',
-                            label: 'Fields',
-                            type: {
-                                type: 'object',
-                                objectDef: {
-                                    type: 'object-ref',
-                                    ref: 'Field',
-                                }
-                            }
-                        }]
+                    fields: [
+                        ObjectDefField,
+                    ]
+                },
+            },
+            'keyed-collection': {
+                label: "Keyed Collection",
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [
+                        {
+                            label: "Key Label",
+                            name: "keyLabel",
+                            type: {type: "string", required: false}
+                        },
+                        ObjectDefField,
+                    ]
                 }
             },
+            'oneof': {
+                label: "One-of",
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [{
+                        label: 'Choices',
+                        name: 'choices',
+                        type: {
+                            type: 'keyed-collection',
+                            objectDef: {
+                                type: 'fields-def',
+                                fields: [{
+                                    label: "Label",
+                                    name: 'label',
+                                    type: {type: 'text'}
+                                }, {
+                                    label: "Order",
+                                    name: 'order',
+                                    type: {type: 'number'}
+                                }, ObjectDefField]
+                            }
+                        }
+                    }]
+                }
+            },
+            'ref': {
+                label: "Ref",
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [{
+                        label: "Ref Path",
+                        name: 'refPath',
+                        type: {type: 'string'}
+                    }]
+                }
+            }
         }
     }
-},{
-    name:'description',
-    label:'Description',
+}, {
+    name: 'description',
+    label: 'Description',
     type: {type: 'text', required: false}
-},{
-    name:'tooltip',
-    label:'Tooltip',
+}, {
+    name: 'tooltip',
+    label: 'Tooltip',
     type: {type: 'text', required: false}
 }]
 
-// export const ObjectTypeFields: Field[] = [{
-//     name: "fields",
-//     label: "Fields",
-// }]
-//
+const FieldsField: Field = {
+    name: 'fields',
+    label: 'Fields',
+    type: {
+        type: 'ordered-collection',
+        objectDef: {
+            type: 'object-ref',
+            ref: 'Field',
+        }
+    }
+}
+
 export const DocSchemaSchema: DocSchema = {
     pages: [{
         label: 'Form',
@@ -132,25 +227,24 @@ export const DocSchemaSchema: DocSchema = {
                         name: 'Label',
                         label: 'Label',
                         type: {type: 'text'}
-                    }, {
-                        name: 'fields',
-                        label: 'Fields',
-                        type: {
-                            type: 'ordered-collection',
-                            objectDef: {
-                                type: 'object-ref',
-                                ref: 'Field',
-                            }
-                        }
-                    }]
+                    }, FieldsField]
+                }
+            }
+        }, {
+            name: "objectTypes",
+            label: "Object Types",
+            type: {
+                type: 'keyed-collection',
+                objectDef: {
+                    type: 'fields-def',
+                    fields: [FieldsField]
                 }
             }
         }]
     }],
     objectTypes: {
         "Field": {
-            id: "Field",
-            fields: FieldTypeFields
+            fields: FieldFields
         }
     }
 };
