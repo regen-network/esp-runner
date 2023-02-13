@@ -1,5 +1,5 @@
 import type {Meta} from '@storybook/react';
-import {Button, Text} from '@adobe/react-spectrum';
+import {Button, Grid, Text, View} from '@adobe/react-spectrum';
 import {DocEditor} from "./DocEditor";
 import * as Y from "yjs";
 import {Stack} from "@mui/material";
@@ -198,9 +198,9 @@ const TestSchema: DocSchema = {
             },
             {
                 name: 'code1',
-                label:"SPARQL Query",
-                type:{
-                    type:'code',
+                label: "SPARQL Query",
+                type: {
+                    type: 'code',
                     language: 'sparql'
                 }
             },
@@ -247,16 +247,25 @@ export const Collab = {
         const map = doc.getMap('x')
         initYMap(TestSchema, map)
         return <Stack>
-            <Stack direction="row">
-                <DocEditor
-                    schema={TestSchema}
-                    ymap={map}
-                />
-                <DocEditor
-                    schema={TestSchema}
-                    ymap={map}
-                />
-            </Stack>
+            <Grid
+                areas={['example schema']}
+                height='auto'
+                width='auto'
+                columns={['50%', '50%']}
+            >
+                <View padding='size-100'>
+                    <DocEditor
+                        schema={TestSchema}
+                        ymap={map}
+                    />
+                </View>
+                <View padding='size-100'>
+                    <DocEditor
+                        schema={TestSchema}
+                        ymap={map}
+                    />
+                </View>
+            </Grid>
             <Button variant="primary"
                     onPress={() => {
                         const json = map.toJSON()
