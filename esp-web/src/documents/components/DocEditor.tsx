@@ -109,7 +109,6 @@ const FormField = ({field, ymap}: { field: Field, ymap: Y.Map<any> }): JSX.Eleme
         case 'code':
             return <CodeField label={field.label} language={type.language} text={value} />
         default:
-            console.log('invalid field', field)
             return <div></div>
     }
 }

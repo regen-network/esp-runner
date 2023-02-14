@@ -13,26 +13,33 @@ export interface EditorProps {
 }
 
 export const Editor = ({docId}: EditorProps): JSX.Element => {
-    const provider = new HocuspocusProvider({
+    const [ready, setReady] = useState(false)
+    const ydoc = new Y.Doc()
+    const doc = ydoc.getMap('doc')
+    new HocuspocusProvider({
         url: 'ws://127.0.0.1:5002',
         name: docId,
-        onStatus(e) {
-            console.log('status', e)
+        document: ydoc,
+        onSynced(e) {
+            setReady(true)
+            console.log ('loaded doc', doc.toJSON())
         }
     });
-    const ydoc = provider.document
-    const doc = ydoc.getMap('doc')
     // const metadata = ydoc.getMap('metadata')
     // const [docSchema, setDocSchema] = useYMapValue(metadata, 'schema')
-    const [docSchema, setDocSchema] = useState<string>()
-    console.log('docSchema', docSchema)
-    if (!docSchema) {
-        return <CreateNewDoc setSchema={setDocSchema}/>
-    } else if (docSchema == 'DocSchema') {
+    // const [docSchema, setDocSchema] = useState<string>()
+    // console.log('docSchema', docSchema)
+    // if (!docSchema) {
+    //     return <CreateNewDoc setSchema={setDocSchema}/>
+    // } else if (docSchema == 'DocSchema') {
+    if (ready) {
         return <SchemaEditor ymap={doc}/>
     } else {
-        return <DocEditorWrapper doc={doc} docSchema={docSchema}/>
+        return <Heading level={1}>Loading</Heading>
     }
+    // } else {
+    //     return <DocEditorWrapper doc={doc} docSchema={docSchema}/>
+    // }
 }
 
 const CreateNewDoc = ({setSchema}: { setSchema: (schema: string) => void }): JSX.Element => {

@@ -5,28 +5,20 @@ import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import {HocuspocusProvider} from '@hocuspocus/provider'
 
-const ydoc = new Y.Doc()
-
 const provider = new HocuspocusProvider({
-    url: 'ws://127.0.0.1:5001',
+    url: 'ws://127.0.0.1:5001/doc',
     name: 'example-document',
-    document: ydoc,
 })
 
-const Tiptap = () => {
+const TipTapExample = () => {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
                 history: false,
             }),
             Collaboration.configure({
-                document: ydoc,
-            }),
-            CollaborationCursor.configure({
-                provider,
-                user: {name: 'John Doe', color: '#ffcc00'},
+                document: provider.document,
             })],
-        content: '<p>Hello World!</p>',
     })
 
     return (
@@ -34,4 +26,4 @@ const Tiptap = () => {
     )
 }
 
-export default Tiptap
+export default TipTapExample

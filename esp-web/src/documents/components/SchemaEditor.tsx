@@ -11,6 +11,7 @@ export interface SchemaEditorProps {
 }
 
 export const SchemaEditor = ({ymap}: SchemaEditorProps): JSX.Element => {
+    console.log('loading schema editor', ymap.toJSON())
     if (!ymap.has('schema')) {
         ymap.set('schema', new Y.Map())
     }

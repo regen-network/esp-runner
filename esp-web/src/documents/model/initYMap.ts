@@ -3,6 +3,7 @@ import * as Y from "yjs";
 import {resolveFields} from "./SchemaContext";
 
 export function initYMap(schema: DocSchema|null, ymap: Y.Map<any>) {
+    console.log('initYMap')
     schema && schema.pages && schema.pages.forEach(page => initYMapFields(schema, page.fields, ymap))
 }
 
@@ -36,6 +37,8 @@ export function initYMapFields(schema: DocSchema|null, fields: Field[], ymap: Y.
                 case 'code':
                     ymap.set(key, new Y.Text())
             }
+        } else {
+            console.log('has', key, ymap.get('key'));
         }
     })
 }
